@@ -78,7 +78,7 @@ export function Breadcrumb({ items, className, forceState }: BreadcrumbProps) {
                 ? 'pointer-events-none text-primary'
                 : forceState === 'pressed'
                   ? 'cursor-pointer text-secondary'
-                  : 'cursor-pointer text-muted active:text-secondary active:duration-(--motion-press-in)',
+                  : 'cursor-pointer text-muted pressed:text-secondary pressed:duration-(--motion-press-in)',
             )}
           >
             {i === 0 ? <TabCrumbLabel label={item.label} /> : <span className="truncate">{item.label}</span>}

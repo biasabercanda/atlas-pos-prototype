@@ -10,7 +10,8 @@ import { buttonSink, buttonSinkForced, cn, overlayPressed, overlayPressedActive,
  *         the tiles, no scale) · Disabled
  *   Primary disabled: bg-raised, text-disabled, no shadow
  *   Secondary disabled: text-disabled, icon at 40%, no shadow
- * Pressed uses CSS :active (pointer, touch and Space/Enter), so no JS state.
+ * Pressed uses the `pressed:` variant (:active or [data-pressed], set on
+ * pointerdown by lib/pressed.ts), so it shows on the first frame everywhere.
  * AntD supplies the <button>, focus handling and disabled semantics; the look
  * is set here with utilities, which sit in a later CSS layer than AntD.
  */
@@ -28,7 +29,7 @@ const button = tv({
     disabled: { true: 'shadow-none cursor-not-allowed', false: '' },
   },
   compoundVariants: [
-    { disabled: false, pressed: false, class: ['shadow-button', 'active:shadow-pressed', overlayPressedActive, buttonSink] },
+    { disabled: false, pressed: false, class: ['shadow-button', 'pressed:shadow-pressed', overlayPressedActive, buttonSink] },
     { disabled: false, pressed: true, class: [...pressedClasses, buttonSinkForced] },
     { variant: 'primary', disabled: true, class: 'bg-raised text-disabled' },
     { variant: 'secondary', disabled: true, class: 'bg-surface border-divider text-disabled' },

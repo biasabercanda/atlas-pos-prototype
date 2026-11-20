@@ -88,7 +88,7 @@ export function FolderTile({ folder, onOpen, highlight }: FolderTileProps) {
           width={size.width}
           height={size.height}
           viewBox={`0 0 ${size.width} ${size.height}`}
-          className={cn('absolute inset-0 overflow-visible drop-shadow-tile group-active/press:drop-shadow-none', pressFadeFilter)}
+          className={cn('absolute inset-0 overflow-visible drop-shadow-tile group-pressed:drop-shadow-none', pressFadeFilter)}
         >
           <defs>
             {/* 1.5px dark inner edge along the bottom (inset part of Shadow/Tile) */}
@@ -121,13 +121,13 @@ export function FolderTile({ folder, onOpen, highlight }: FolderTileProps) {
             <path
               d={bodyPath(size.width, size.height)}
               filter={`url(#${pressed})`}
-              className={cn('opacity-0 group-active/press:opacity-100', pressFadeOpacity)}
+              className={cn('opacity-0 group-pressed:opacity-100', pressFadeOpacity)}
               style={{ fill: 'var(--bg-tile-base)' }}
             />
             <path d={bodyPath(size.width, size.height)} style={{ fill: 'var(--tint)', mixBlendMode: 'overlay' }} />
             <path
               d={bodyPath(size.width, size.height)}
-              className={cn('opacity-0 group-active/press:opacity-100', pressFadeOpacity)}
+              className={cn('opacity-0 group-pressed:opacity-100', pressFadeOpacity)}
               style={{ fill: 'var(--bg-overlay-pressed)' }}
             />
             <path d={topLightPath(size.width)} style={{ fill: 'var(--effect-top-light)', opacity: 0.12 }} />

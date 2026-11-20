@@ -88,7 +88,7 @@ export function Segmented<V extends string>({
             value: o.value,
             title: o.title,
             label: (
-              <span className={s.face()}>
+              <span data-pressable className={s.face()}>
                 {selected ? (
                   <motion.span layoutId="segmented-thumb" transition={selectionSlide} aria-hidden className={s.thumb()} />
                 ) : (

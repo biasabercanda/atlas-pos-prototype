@@ -8,7 +8,25 @@
 @import "tailwindcss";
 @import "./theme/tokens.css";
 
+/*
+ * Pressed = CSS :active OR [data-pressed]. lib/pressed.ts sets data-pressed on
+ * pointerdown, so presses show on the first frame in every browser (Firefox
+ * delays :active ~100ms on touch while it checks for a scroll).
+ *   pressed:        the pressed element itself
+ *   group-pressed:  children of a `group/press` element that is pressed
+ */
+@custom-variant pressed (&:is(:active, [data-pressed]));
+@custom-variant group-pressed (:where(.group\/press):is(:active, [data-pressed]) &);
+
 @layer base {
+  /* No double-tap-to-zoom wait: taps fire `click` as soon as the finger lifts.
+     Pan and pinch-zoom still work. */
+  html,
+  body,
+  * {
+    touch-action: manipulation;
+  }
+
   html,
   body,
   #root {

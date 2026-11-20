@@ -40,17 +40,17 @@ export const overlayPressed = 'bg-[image:linear-gradient(var(--bg-overlay-presse
  * release it fades out (--motion-press-out). Written out in full for Tailwind.
  */
 export const pressPill =
-  'opacity-0 scale-90 transition-[opacity,scale] duration-(--motion-press-out) ease-(--motion-ease) motion-reduce:transition-none group-active/press:opacity-100 group-active/press:scale-100 group-active/press:duration-(--motion-press-in)'
+  'opacity-0 scale-90 transition-[opacity,scale] duration-(--motion-press-out) ease-(--motion-ease) motion-reduce:transition-none group-pressed:opacity-100 group-pressed:scale-100 group-pressed:duration-(--motion-press-in)'
 
 /**
  * Raised press easing (tiles, folders): add to a layer whose opacity or filter
- * changes under `group-active/press`. Eases in over --motion-press-in, out over
+ * changes under `group-pressed`. Eases in over --motion-press-in, out over
  * --motion-press-out. Written out in full for Tailwind.
  */
 export const pressFadeOpacity =
-  'transition-opacity duration-(--motion-press-out) ease-(--motion-ease) group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+  'transition-opacity duration-(--motion-press-out) ease-(--motion-ease) group-pressed:duration-(--motion-press-in) motion-reduce:transition-none'
 export const pressFadeFilter =
-  'transition-[filter] duration-(--motion-press-out) ease-(--motion-ease) group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+  'transition-[filter] duration-(--motion-press-out) ease-(--motion-ease) group-pressed:duration-(--motion-press-in) motion-reduce:transition-none'
 
 /**
  * Tile press "sink": the tile's content (name, icon) moves down 1px while
@@ -58,15 +58,15 @@ export const pressFadeFilter =
  * never delays the next tap. Written out in full for Tailwind.
  */
 export const pressSink =
-  'transition-transform duration-(--motion-press-out) ease-(--motion-ease) group-active/press:translate-y-px group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+  'transition-transform duration-(--motion-press-out) ease-(--motion-ease) group-pressed:translate-y-px group-pressed:duration-(--motion-press-in) motion-reduce:transition-none'
 
 /**
  * The same 1px sink for buttons, whose content is AntD's icon and label
  * <span>s (direct children of the <button>), driven by the button's own
- * :active. Written out in full for Tailwind.
+ * pressed state. Written out in full for Tailwind.
  */
 export const buttonSink =
-  '[&>span]:transition-transform [&>span]:duration-(--motion-press-out) [&>span]:ease-(--motion-ease) active:[&>span]:translate-y-px active:[&>span]:duration-(--motion-press-in) motion-reduce:[&>span]:transition-none'
+  '[&>span]:transition-transform [&>span]:duration-(--motion-press-out) [&>span]:ease-(--motion-ease) pressed:[&>span]:translate-y-px pressed:[&>span]:duration-(--motion-press-in) motion-reduce:[&>span]:transition-none'
 
 /** Button content held in its sunk position (gallery "Pressed" columns). */
 export const buttonSinkForced = '[&>span]:translate-y-px'
@@ -75,8 +75,8 @@ export const buttonSinkForced = '[&>span]:translate-y-px'
 export const pressPillForced = 'opacity-100 scale-100'
 
 /**
- * Same overlay, only while :active. Written out in full (not built from the
+ * Same overlay, only while pressed (`pressed:` = :active or [data-pressed]). Written out in full (not built from the
  * string above) because Tailwind only generates classes it finds literally.
  */
 export const overlayPressedActive =
-  'active:bg-[image:linear-gradient(var(--bg-overlay-pressed),var(--bg-overlay-pressed))]'
+  'pressed:bg-[image:linear-gradient(var(--bg-overlay-pressed),var(--bg-overlay-pressed))]'

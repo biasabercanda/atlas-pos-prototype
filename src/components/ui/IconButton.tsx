@@ -28,7 +28,7 @@ export function IconButton({ label, icon, onClick, className, forceState }: Icon
         'size-12 min-w-12 rounded-md border-0 p-0 text-secondary shadow-none transition-none',
         'flex items-center justify-center bg-transparent',
         '[&_svg]:size-5',
-        forceState === 'pressed' ? 'bg-raised' : 'active:bg-raised',
+        forceState === 'pressed' ? 'bg-raised' : 'pressed:bg-raised',
         className,
       )}
     />

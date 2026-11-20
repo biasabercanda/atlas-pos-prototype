@@ -3,9 +3,11 @@ import { createRoot } from 'react-dom/client'
 import '@fontsource-variable/inter'
 import './index.css'
 import App from './App.tsx'
+import { installPressedState } from './lib/pressed'
 
-// iOS Safari only applies :active (flat pressed states) when a touchstart listener exists.
-document.addEventListener('touchstart', () => {}, { passive: true })
+// Pressed states on pointerdown, in every browser (see lib/pressed.ts).
+// The pointer listener also covers iOS Safari's need for a touch listener before :active applies.
+installPressedState()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

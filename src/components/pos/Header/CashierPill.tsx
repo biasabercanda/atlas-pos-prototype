@@ -13,7 +13,7 @@ export function CashierPill({ name, online = true }: { name: string; online?: bo
     <button
       type="button"
       aria-label={`${name}, ${online ? 'online' : 'offline'}`}
-      className="flex h-12 shrink-0 cursor-pointer items-center rounded-full bg-raised pr-4 active:bg-surface"
+      className="flex h-12 shrink-0 cursor-pointer items-center rounded-full bg-raised pr-4 pressed:bg-surface"
     >
       <span aria-hidden className="-mr-1 flex size-12 items-center justify-center">
         <span className={cn('size-4 rounded-full ring-4 ring-online-ring', online ? 'bg-online' : 'bg-disabled')} />
