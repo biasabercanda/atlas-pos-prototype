@@ -1,3 +1,6 @@
+import { menu } from '../../data/menu'
+import { cn } from '../../lib/cn'
+import { usePosState } from '../../store/context'
 import { CategoryTabs } from './CategoryTabs'
 import { Header } from './Header/Header'
 import { MenuGrid } from './MenuGrid'
@@ -15,9 +18,17 @@ import { OrderPanel } from './OrderPanel/OrderPanel'
  * The root is a size container named "app". Every responsive rule queries the
  * app's own size (never the browser viewport), so the presentation shell can
  * render any tablet size inside a desktop browser. It fills its parent.
+ *
+ * The surface's bottom-right corner is rounded, except while the last tab is
+ * active: that tab sits flush under the corner, so the corner goes square and
+ * the tab's right side continues the surface edge straight down.
  */
 
+const lastTabId = menu.tabs[menu.tabs.length - 1].id
+
 export function PosApp() {
+  const { activeTabId } = usePosState()
+  const lastTabActive = activeTabId === lastTabId
   return (
     <div
       data-pos-app
@@ -25,7 +36,12 @@ export function PosApp() {
       className="flex size-full overflow-hidden bg-app text-primary"
     >
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="flex min-h-0 flex-1 flex-col gap-4 bg-surface p-4">
+        <main
+          className={cn(
+            'flex min-h-0 flex-1 flex-col gap-4 bg-surface p-4',
+            lastTabActive ? 'rounded-br-none' : 'rounded-br-lg',
+          )}
+        >
           <Header />
           <MenuGrid />
         </main>

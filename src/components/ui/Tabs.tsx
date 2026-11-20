@@ -37,6 +37,11 @@ export interface TabsProps {
   className?: string
   /** Gallery only: draw this tab in its pressed state. */
   forcePressedKey?: string
+  /**
+   * The last tab touches the right edge of the surface above. When it's
+   * active, its right side runs straight down from the surface edge (no curve).
+   */
+  flushEnd?: boolean
 }
 
 /** 12×12 concave corner that blends the active tab into the surface above. */
@@ -56,8 +61,12 @@ function Curve({ side }: { side: 'left' | 'right' }) {
   )
 }
 
-/** The moving "active" layer: surface, curves and brand strip. */
-function ActiveIndicator() {
+/**
+ * The moving "active" layer: surface, curves and brand strip.
+ * `flushRight`: this tab touches the surface's right edge, so its right side
+ * continues the surface edge straight down (no concave curve).
+ */
+function ActiveIndicator({ flushRight }: { flushRight: boolean }) {
   return (
     <motion.span
       layoutId="tab-active"
@@ -66,7 +75,7 @@ function ActiveIndicator() {
       className="absolute inset-0 rounded-b-lg bg-surface"
     >
       <Curve side="left" />
-      <Curve side="right" />
+      {!flushRight && <Curve side="right" />}
       <span className="absolute inset-x-4 bottom-0 h-[5px] rounded-t-[3px] bg-brand" />
     </motion.span>
   )
@@ -77,15 +86,17 @@ function TabFace({
   active,
   divider,
   pressed,
+  flushRight,
 }: {
   label: string
   active: boolean
   divider: boolean
   pressed: boolean
+  flushRight: boolean
 }) {
   return (
     <span data-tab-face className="group/press relative flex h-16 w-full min-w-0 items-center px-4">
-      {active && <ActiveIndicator />}
+      {active && <ActiveIndicator flushRight={flushRight} />}
       {!active && (
         <span
           aria-hidden
@@ -111,7 +122,7 @@ function TabFace({
   )
 }
 
-export function Tabs({ items, activeKey, onChange, className, forcePressedKey }: TabsProps) {
+export function Tabs({ items, activeKey, onChange, className, forcePressedKey, flushEnd = false }: TabsProps) {
   const groupId = useId()
   const activeIndex = items.findIndex((i) => i.key === activeKey)
   const pressedIndex = items.findIndex((i) => i.key === forcePressedKey)
@@ -135,6 +146,7 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey }:
                 (pressedIndex === -1 || i !== pressedIndex + 1)
               }
               pressed={item.key === forcePressedKey}
+              flushRight={flushEnd && i === items.length - 1}
             />
           ),
         }))}

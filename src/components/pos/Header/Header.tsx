@@ -29,6 +29,7 @@ export function Header() {
           { value: 'map', content: <MapFilled />, title: 'Map view' },
           { value: 'grid', content: <ViewGridFilled />, title: 'Grid view' },
         ]}
+        className="shrink-0"
       />
       <Breadcrumb
         items={crumbs.map((c) => ({
@@ -36,8 +37,9 @@ export function Header() {
           onClick: c.current ? undefined : () => dispatch({ type: 'closeFolder' }),
         }))}
       />
-      <div className="flex-1" />
-      <div className="flex items-center gap-2">
+      {/* Spacer grows; when the breadcrumb is long it collapses and the crumbs truncate. */}
+      <div className="min-w-0 flex-1" />
+      <div className="flex shrink-0 items-center gap-2">
         <IconButton label="Log out" icon={<LogOut />} />
         <CashierPill name="Cashier 2" />
         <div className="flex">

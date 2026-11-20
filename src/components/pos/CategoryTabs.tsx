@@ -15,7 +15,12 @@ export function CategoryTabs() {
   const dispatch = usePosDispatch()
   return (
     <nav aria-label="Menu categories" className="h-20 shrink-0 pb-4 pl-4">
-      <Tabs items={items} activeKey={activeTabId} onChange={(tabId) => dispatch({ type: 'setTab', tabId })} />
+      <Tabs
+        items={items}
+        activeKey={activeTabId}
+        onChange={(tabId) => dispatch({ type: 'setTab', tabId })}
+        flushEnd
+      />
     </nav>
   )
 }

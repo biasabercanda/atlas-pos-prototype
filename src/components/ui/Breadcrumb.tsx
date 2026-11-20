@@ -49,7 +49,7 @@ export function Breadcrumb({ items, className, forceState }: BreadcrumbProps) {
             tabIndex={current ? -1 : undefined}
             onClick={current ? undefined : item.onClick}
             className={cn(
-              'flex h-12 min-w-12 items-center text-base leading-6 font-bold whitespace-nowrap',
+              'flex h-12 min-w-12 max-w-full items-center text-base leading-6 font-bold whitespace-nowrap',
               'transition-colors duration-(--motion-feedback) ease-(--motion-ease) motion-reduce:transition-none',
               current
                 ? 'pointer-events-none text-primary'
@@ -58,19 +58,23 @@ export function Breadcrumb({ items, className, forceState }: BreadcrumbProps) {
                   : 'cursor-pointer text-muted active:text-secondary active:duration-(--motion-press-in)',
             )}
           >
-            {item.label}
+            <span className="truncate">{item.label}</span>
           </button>
         )
         return {
           // The first crumb never animates (it's the tab itself); deeper ones slide in.
-          title: i === 0 ? crumb : <motion.span {...slideIn} className="flex">{crumb}</motion.span>,
+          title: i === 0 ? crumb : <motion.span {...slideIn} className="flex min-w-0">{crumb}</motion.span>,
         }
       })}
       className={cn(
-        '[&_ol]:flex-nowrap [&_ol]:items-center',
-        '[&_li]:flex [&_li]:items-center',
-        '[&_.ant-breadcrumb-separator]:flex [&_.ant-breadcrumb-separator]:items-center',
-        '[&_.ant-breadcrumb-link]:flex',
+        // Long labels truncate with "…" instead of pushing the header actions:
+        // the breadcrumb can shrink; parent crumbs give way first (down to their
+        // 48px tap target) before the current crumb truncates; separators never shrink.
+        'min-w-0',
+        '[&_ol]:flex-nowrap [&_ol]:items-center [&_ol]:min-w-0',
+        '[&_li]:flex [&_li]:items-center [&_li]:min-w-0 [&_li]:shrink-[100000] [&_li:last-child]:shrink',
+        '[&_.ant-breadcrumb-separator]:flex [&_.ant-breadcrumb-separator]:items-center [&_.ant-breadcrumb-separator]:shrink-0',
+        '[&_.ant-breadcrumb-link]:flex [&_.ant-breadcrumb-link]:min-w-0',
         className,
       )}
     />
