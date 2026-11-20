@@ -51,6 +51,14 @@ export const pressFadeOpacity =
 export const pressFadeFilter =
   'transition-[filter] duration-(--motion-press-out) ease-(--motion-ease) group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
 
+/**
+ * Tile press "sink": the tile's content (name, icon) moves down 1px while
+ * pressed, like a key going down, and comes back on release. CSS only, so it
+ * never delays the next tap. Written out in full for Tailwind.
+ */
+export const pressSink =
+  'transition-transform duration-(--motion-press-out) ease-(--motion-ease) group-active/press:translate-y-px group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+
 /** The pressed pill held in its pressed look (gallery "Pressed" columns). */
 export const pressPillForced = 'opacity-100 scale-100'
 

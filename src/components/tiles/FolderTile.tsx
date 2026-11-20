@@ -1,5 +1,5 @@
 import { useId, type CSSProperties } from 'react'
-import { cn, pressFadeFilter, pressFadeOpacity } from '../../lib/cn'
+import { cn, pressFadeFilter, pressFadeOpacity, pressSink } from '../../lib/cn'
 import { useElementSize } from '../../lib/useElementSize'
 import type { Folder } from '../../data/types'
 
@@ -140,7 +140,12 @@ export function FolderTile({ folder, onOpen, highlight }: FolderTileProps) {
         <path d={FLAP} style={{ fill: 'var(--mark)' }} />
       </svg>
 
-      <span className="relative flex size-full flex-col items-center justify-center gap-[3px] py-3 pr-3 pl-5 text-center">
+      <span
+        className={cn(
+          'relative flex size-full flex-col items-center justify-center gap-[3px] py-3 pr-3 pl-5 text-center',
+          pressSink,
+        )}
+      >
         <span className="line-clamp-2 text-sm leading-5 font-bold text-primary @min-[160px]:text-base @min-[160px]:leading-6">
           {folder.name}
         </span>

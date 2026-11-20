@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { cn, pressFadeFilter, pressFadeOpacity } from '../../lib/cn'
+import { cn, pressFadeFilter, pressFadeOpacity, pressSink } from '../../lib/cn'
 import type { CategoryColor } from '../../data/types'
 
 /*
@@ -105,7 +105,9 @@ export function TileShell({
           </>
         )}
       </span>
-      <span className="relative flex size-full flex-col items-center justify-center">{children}</span>
+      <span className={cn('relative flex size-full flex-col items-center justify-center', !disabled && pressSink)}>
+        {children}
+      </span>
       {overlay}
     </button>
   )
