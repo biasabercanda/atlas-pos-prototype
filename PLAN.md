@@ -87,9 +87,14 @@ src/
 │     ├─ DeviceFrame.tsx        sized frame, transform: scale, Motion resize
 │     └─ DeviceSwitcher.tsx     uses ui/Segmented, syncs ?device=
 │
-├─ store/order-store.tsx    context + reducer
+├─ store/
+│  ├─ order-reducer.ts      pure reducer + initial state (no React; testable)
+│  ├─ order-reducer.test.ts Vitest: totals, add/append, sold out, folders, tabs
+│  ├─ context.ts            usePosState / usePosDispatch (split contexts)
+│  └─ OrderStoreProvider.tsx reads ?order=empty, mounted above the shell
 ├─ data/
 │  ├─ menu.json
+│  ├─ menu.ts               normalises menu.json once (cents, tagged cells)
 │  ├─ types.ts
 │  └─ selectors.ts          cellsFor(tab, folder), breadcrumb, line totals, totals
 ├─ lib/
