@@ -1,0 +1,12 @@
+// Cloudflare Workers static assets: serves the Vite build (dist/) as a
+// single-page app. No Worker code, no backend. Deploy with `npm run deploy`
+// (after a one-time `npx wrangler login`).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "atlas-pos-prototype",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
