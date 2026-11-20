@@ -1,5 +1,8 @@
+import { useReducedMotion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import { menu } from '../../data/menu'
 import { cn } from '../../lib/cn'
+import { motionTokens } from '../../lib/motion'
 import { usePosState } from '../../store/context'
 import { CategoryTabs } from './CategoryTabs'
 import { Header } from './Header/Header'
@@ -20,15 +23,36 @@ import { OrderPanel } from './OrderPanel/OrderPanel'
  * render any tablet size inside a desktop browser. It fills its parent.
  *
  * The surface's bottom-right corner is rounded, except while the last tab is
- * active: that tab sits flush under the corner, so the corner goes square and
- * the tab's right side continues the surface edge straight down.
+ * active: that tab sits flush under the corner, so the corner goes square
+ * (once the tab has slid into place) and the tab's right side continues the
+ * surface edge straight down.
  */
 
 const lastTabId = menu.tabs[menu.tabs.length - 1].id
 
+/**
+ * Whether the surface's bottom-right corner should be square. It squares only
+ * after the active tab has finished sliding under it (--motion-select), so the
+ * user never sees a square corner with nothing beneath it. Leaving the last tab
+ * rounds it again straight away.
+ */
+function useSquareCorner(lastTabActive: boolean) {
+  const reduceMotion = useReducedMotion()
+  const [squared, setSquared] = useState(lastTabActive)
+  // Leaving the last tab: round immediately (state adjusted during render).
+  if (!lastTabActive && squared) setSquared(false)
+  useEffect(() => {
+    if (!lastTabActive) return
+    const timer = setTimeout(() => setSquared(true), reduceMotion ? 0 : motionTokens.select)
+    return () => clearTimeout(timer)
+  }, [lastTabActive, reduceMotion])
+  return lastTabActive && squared
+}
+
 export function PosApp() {
   const { activeTabId } = usePosState()
   const lastTabActive = activeTabId === lastTabId
+  const squareCorner = useSquareCorner(lastTabActive)
   return (
     <div
       data-pos-app
@@ -39,7 +63,7 @@ export function PosApp() {
         <main
           className={cn(
             'flex min-h-0 flex-1 flex-col gap-4 bg-surface p-4',
-            lastTabActive ? 'rounded-br-none' : 'rounded-br-lg',
+            squareCorner ? 'rounded-br-none' : 'rounded-br-lg',
           )}
         >
           <Header />
