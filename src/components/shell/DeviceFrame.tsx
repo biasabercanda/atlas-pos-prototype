@@ -17,10 +17,6 @@ export function DeviceFrame({ device, scale, children }: { device: Device; scale
   return (
     <motion.div
       data-device-frame
-      // A layout node, so Motion's layout animations inside (the sliding active
-      // tab) account for this frame's scale; without it they measure on screen
-      // and overshoot. "position" keeps Motion from also animating our size.
-      layout="position"
       initial={false}
       animate={{ width: device.width, height: device.height, scale }}
       transition={frameResize}

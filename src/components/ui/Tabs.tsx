@@ -1,6 +1,6 @@
 import { Tabs as AntTabs } from 'antd'
-import { LayoutGroup, motion } from 'motion/react'
-import { useId, useState } from 'react'
+import { animate, motion, useMotionValue } from 'motion/react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { cn } from '../../lib/cn'
 import { selectionSlide } from '../../lib/motion'
 
@@ -18,9 +18,12 @@ import { selectionSlide } from '../../lib/motion'
  *             into the active shape instead of fading out.
  * Tabs fill the width equally; long labels truncate.
  *
- * The active look (surface + curves + strip) is one shared Motion element
- * (`layoutId`), so it slides to the newly selected tab instead of jumping.
- * Each <Tabs> gets its own LayoutGroup so two tab bars never share it.
+ * The active look (surface + curves + strip) is ONE element for the whole bar
+ * that slides to the newly selected tab (--motion-select). Its x and width
+ * come from layout offsets (offsetLeft/offsetWidth), which ignore CSS
+ * transforms, so the slide is correct inside the presentation shell's scaled
+ * device frame. (Motion's layoutId measures on screen and broke when scaled.)
+ * Stacking: pressed pills < active surface < labels.
  *
  * AntD supplies the tablist semantics, roving focus and arrow-key navigation.
  * Its own visuals (ink bar, nav border, overflow menu, panes) are switched off
@@ -63,24 +66,26 @@ function Curve({ side }: { side: 'left' | 'right' }) {
   )
 }
 
-/**
- * The moving "active" layer: surface, curves and brand strip.
- * `flushRight`: this tab touches the surface's right edge, so its right side
- * continues the surface edge straight down (no concave curve).
- */
-function ActiveIndicator({ flushRight }: { flushRight: boolean }) {
+/** Surface, curves and strip of the active tab, positioned by <Tabs>. */
+function ActiveSurface({ flushRight }: { flushRight: boolean }) {
   return (
-    <motion.span
-      layoutId="tab-active"
-      transition={selectionSlide}
-      aria-hidden
-      className="absolute inset-0 rounded-b-lg bg-surface"
-    >
+    <>
       <Curve side="left" />
       {!flushRight && <Curve side="right" />}
       <span className="absolute inset-x-4 bottom-0 h-[5px] rounded-t-[3px] bg-brand" />
-    </motion.span>
+    </>
   )
+}
+
+/** Left offset of `el` inside `ancestor`, in layout px (unaffected by CSS transforms). */
+function offsetLeftWithin(el: HTMLElement, ancestor: HTMLElement) {
+  let x = 0
+  let node: HTMLElement | null = el
+  while (node && node !== ancestor) {
+    x += node.offsetLeft
+    node = node.offsetParent as HTMLElement | null
+  }
+  return x
 }
 
 function TabFace({
@@ -88,7 +93,6 @@ function TabFace({
   active,
   divider,
   pressed,
-  flushRight,
   onPressStart,
   onPressCancel,
 }: {
@@ -96,7 +100,6 @@ function TabFace({
   active: boolean
   divider: boolean
   pressed: boolean
-  flushRight: boolean
   onPressStart: () => void
   onPressCancel: () => void
 }) {
@@ -134,7 +137,6 @@ function TabFace({
               : 'top-1 bottom-1 rounded-md opacity-0 scale-90',
         )}
       />
-      {active && <ActiveIndicator flushRight={flushRight} />}
       <span
         className={cn(
           'relative z-10 min-w-0 flex-1 truncate text-center text-sm leading-5',
@@ -155,7 +157,6 @@ function TabFace({
 }
 
 export function Tabs({ items, activeKey, onChange, className, forcePressedKey, flushEnd = false }: TabsProps) {
-  const groupId = useId()
   // The tab being pressed: set on pointerdown, cleared when the press is
   // cancelled or the tab becomes active (in the same render, so the pill goes
   // straight from pressed to expanding).
@@ -167,8 +168,66 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey, f
     setPressedKey(null)
     onChange(key)
   }
+
+  // ── Active surface position (layout px, transform-proof) ──
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const x = useMotionValue(0)
+  const width = useMotionValue(0)
+  const opacity = useMotionValue(0) // hidden until first measured
+  const activeKeyRef = useRef(activeKey)
+  const placedKeyRef = useRef<string | null>(null)
+
+  // Moves the surface onto the active tab: slide (tab change) or jump (first
+  // paint, resize). Stable, so the resize observer below is created once.
+  const place = useCallback(
+    (slide: boolean) => {
+      const wrap = wrapRef.current
+      if (!wrap) return
+      const tab = wrap.querySelector<HTMLElement>(`.ant-tabs-tab[data-node-key="${CSS.escape(activeKeyRef.current)}"]`)
+      if (!tab) return
+      const toX = offsetLeftWithin(tab, wrap)
+      const toW = tab.offsetWidth
+      if (slide) {
+        animate(x, toX, selectionSlide)
+        animate(width, toW, selectionSlide)
+      } else {
+        x.jump(toX)
+        width.jump(toW)
+      }
+      opacity.jump(1)
+    },
+    [x, width, opacity],
+  )
+
+  // Tab changes slide; the very first placement jumps.
+  useLayoutEffect(() => {
+    activeKeyRef.current = activeKey
+    const slide = placedKeyRef.current !== null && placedKeyRef.current !== activeKey
+    placedKeyRef.current = activeKey
+    place(slide)
+  }, [activeKey, place])
+
+  // Device-frame resizes change tab widths: follow them instantly.
+  useLayoutEffect(() => {
+    const wrap = wrapRef.current
+    if (!wrap) return
+    const observer = new ResizeObserver(() => place(false))
+    observer.observe(wrap)
+    return () => observer.disconnect()
+  }, [place])
+
+  const lastActive = flushEnd && activeIndex === items.length - 1
+
   return (
-    <LayoutGroup id={groupId}>
+    <div ref={wrapRef} className={cn('relative w-full', className)}>
+      <motion.span
+        aria-hidden
+        data-active-surface
+        style={{ x, width, opacity }}
+        className="pointer-events-none absolute top-0 left-0 z-[1] h-16 rounded-b-lg bg-surface"
+      >
+        <ActiveSurface flushRight={lastActive} />
+      </motion.span>
       <AntTabs
         activeKey={activeKey}
         onChange={handleChange}
@@ -187,7 +246,6 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey, f
                 (pressedIndex === -1 || i !== pressedIndex + 1)
               }
               pressed={i === pressedIndex}
-              flushRight={flushEnd && i === items.length - 1}
               onPressStart={() => setPressedKey(item.key)}
               onPressCancel={() => setPressedKey((k) => (k === item.key ? null : k))}
             />
@@ -196,14 +254,16 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey, f
         className={cn(
           'w-full',
           '[&_.ant-tabs-nav]:m-0 [&_.ant-tabs-nav]:before:border-0',
-          '[&_.ant-tabs-nav-wrap]:overflow-visible',
-          '[&_.ant-tabs-nav-list]:w-full',
+          // AntD puts transforms on the nav wrap and list (for scrolling, unused
+          // here). Each creates a stacking layer, which would put the active
+          // surface (z-1) above the labels (z-10). Switched off.
+          '[&_.ant-tabs-nav-wrap]:overflow-visible [&_.ant-tabs-nav-wrap]:transform-none!',
+          '[&_.ant-tabs-nav-list]:w-full [&_.ant-tabs-nav-list]:transform-none!',
           '[&_.ant-tabs-tab]:min-w-0 [&_.ant-tabs-tab]:flex-1 [&_.ant-tabs-tab]:p-0',
           '[&_.ant-tabs-tab-btn]:w-full [&_.ant-tabs-tab-btn]:min-w-0',
           '[&_.ant-tabs-ink-bar]:hidden [&_.ant-tabs-nav-operations]:hidden [&_.ant-tabs-content-holder]:hidden',
-          className,
         )}
       />
-    </LayoutGroup>
+    </div>
   )
 }
