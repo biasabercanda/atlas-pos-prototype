@@ -150,6 +150,7 @@
   /* ── Semantic · brand, status, badges ── */
   --accent-brand: var(--pink-500);        /* Charge, active toggle, active tab strip */
   --status-online: var(--green-400);
+  --status-online-ring: rgb(31 181 122 / 0.3); /* added in code: 4px ring on the status dot (raw value in Figma, no primitive step) */
   --badge-count-bg: var(--neutral-0);
   --badge-count-text: var(--neutral-900);
   --badge-best-seller-bg: var(--amber-300);
@@ -228,6 +229,7 @@
 
   --color-brand: var(--accent-brand);
   --color-online: var(--status-online);
+  --color-online-ring: var(--status-online-ring);
   --color-badge: var(--badge-count-bg);
   --color-badge-text: var(--badge-count-text);
   --color-best-seller: var(--badge-best-seller-bg);

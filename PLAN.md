@@ -58,6 +58,19 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | Brief: divider on "each inactive tab… except after active" would put one before the first tab | Also skipped on the first tab |
 | Raised pressed overlay | Done as a `background-image` gradient layer (`overlayPressed` in `lib/cn.ts`): above the fill, below the content, no extra element |
 
+### Findings from the static layout (phase 3)
+
+Measured at 1194 × 834 against Figma 257:21144: surface 850 × 754, header 818 × 56, grid 818 × 650 with every cell **150.8 × 150.5**, tabs 163.6 × 64, order panel sections at y 16 / 88 / 630 / 698. All match.
+
+| Finding | Resolution |
+|---|---|
+| Table pill is 24 tall on the final screen (padding 4/12, as the brief says), 22 on the component sheet | Final screen wins: padding 4/12 (reverses the phase 2 choice) |
+| Status dot has a 4px ring in a raw rgba with no token | Added `--status-online-ring` (+ `ring-online-ring`) |
+| Cashier pill: brief lists `shadow-soft`, the Figma component has none | Followed Figma (no shadow) |
+| Gap between Hold/Fire/Print and Charge: brief 10, Figma frame 8 | 8 |
+| Iconoir defaults to stroke 1.5 / 24px | `IconoirProvider` in `App.tsx` sets 20px, stroke 2 for every icon |
+| Order line qty shows "2x" in the component, "2×" on the final screen | "×" |
+
 Component gallery: `?view=gallery` (`src/dev/Gallery.tsx`) shows every wrapper in every state.
 
 ---
