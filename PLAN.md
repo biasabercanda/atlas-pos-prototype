@@ -18,7 +18,7 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | AntD + Tailwind | CSS cascade layers: `@layer theme, base, antd, components, utilities`, with AntD's `StyleProvider layer` so Tailwind's reset doesn't break AntD and utilities can override AntD |
 | Routing | None. One screen; `?device=` and `?order=` read and written with `URLSearchParams` + `history.replaceState` |
 | Class helpers | `clsx` + `tailwind-merge` (`cn()`), and `tailwind-variants` for components with variants (Button, tiles) |
-| Motion | `motion` (`motion/react`): only the device-frame resize in the presentation shell. All pressed states are CSS `:active` (no scale anywhere). |
+| Motion | `motion` (`motion/react`): the active tab sliding between tabs (`layoutId`, 300ms, no bounce) and the device-frame resize. All pressed states are CSS `:active` (no scale anywhere). `MotionConfig reducedMotion="user"` respects the OS setting. |
 | Icons | `iconoir-react` (regular) and `iconoir-react/solid` (filled) |
 | Font | Inter via `@fontsource-variable/inter` (self-hosted, bundled) |
 | State | One React context + reducer |
@@ -79,7 +79,7 @@ src/
 │  │  ├─ Button.tsx         Primary (Charge), Secondary (Hold/Fire/Print); :active press, no scale
 │  │  ├─ IconButton.tsx     48×48, 20px icon, flat pressed state
 │  │  ├─ Segmented.tsx      view toggle + device switcher
-│  │  ├─ Tabs.tsx           category tabs: brand strip, dividers, joined surface
+│  │  ├─ Tabs.tsx           category tabs: sliding active surface + strip (Motion), dividers
 │  │  ├─ Breadcrumb.tsx     48px crumbs, nav-arrow-right separator
 │  │  ├─ Tag.tsx            table pill "T1"
 │  │  └─ icons.tsx          filled map / view-grid / fire-flame / printer (from Figma)

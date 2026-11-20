@@ -1,4 +1,6 @@
 import { Tabs as AntTabs } from 'antd'
+import { LayoutGroup, motion } from 'motion/react'
+import { useId } from 'react'
 import { cn } from '../../lib/cn'
 
 /*
@@ -11,10 +13,16 @@ import { cn } from '../../lib/cn'
  *   Pressed:  bg-raised, radius 10.
  * Tabs fill the width equally; long labels truncate.
  *
+ * The active look (surface + curves + strip) is one shared Motion element
+ * (`layoutId`), so it slides to the newly selected tab instead of jumping.
+ * Each <Tabs> gets its own LayoutGroup so two tab bars never share it.
+ *
  * AntD supplies the tablist semantics, roving focus and arrow-key navigation.
  * Its own visuals (ink bar, nav border, overflow menu, panes) are switched off
  * and each tab's visuals are drawn by <TabFace>.
  */
+
+const slide = { type: 'spring', bounce: 0, duration: 0.3 } as const
 
 export interface TabItem {
   key: string
@@ -47,6 +55,22 @@ function Curve({ side }: { side: 'left' | 'right' }) {
   )
 }
 
+/** The moving "active" layer: surface, curves and brand strip. */
+function ActiveIndicator() {
+  return (
+    <motion.span
+      layoutId="tab-active"
+      transition={slide}
+      aria-hidden
+      className="absolute inset-0 rounded-b-lg bg-surface"
+    >
+      <Curve side="left" />
+      <Curve side="right" />
+      <span className="absolute inset-x-4 bottom-0 h-[5px] rounded-t-[3px] bg-brand" />
+    </motion.span>
+  )
+}
+
 function TabFace({
   label,
   active,
@@ -62,57 +86,54 @@ function TabFace({
     <span
       className={cn(
         'relative flex h-16 w-full min-w-0 items-center px-4',
-        active ? 'rounded-b-lg bg-surface' : pressed ? 'rounded-md bg-raised' : 'rounded-md active:bg-raised',
+        !active && (pressed ? 'rounded-md bg-raised' : 'rounded-md active:bg-raised'),
       )}
     >
+      {active && <ActiveIndicator />}
       <span
         className={cn(
-          'min-w-0 flex-1 truncate text-center text-sm leading-5',
+          'relative min-w-0 flex-1 truncate text-center text-sm leading-5',
           active ? 'font-extrabold text-primary' : 'font-semibold text-muted',
         )}
       >
         {label}
       </span>
-      {active && (
-        <>
-          <span aria-hidden className="absolute inset-x-4 bottom-0 h-[5px] rounded-t-[3px] bg-brand" />
-          <Curve side="left" />
-          <Curve side="right" />
-        </>
-      )}
       {divider && <span aria-hidden className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider" />}
     </span>
   )
 }
 
 export function Tabs({ items, activeKey, onChange, className, forcePressedKey }: TabsProps) {
+  const groupId = useId()
   const activeIndex = items.findIndex((i) => i.key === activeKey)
   return (
-    <AntTabs
-      activeKey={activeKey}
-      onChange={onChange}
-      animated={false}
-      items={items.map((item, i) => ({
-        key: item.key,
-        label: (
-          <TabFace
-            label={item.label}
-            active={i === activeIndex}
-            divider={i !== activeIndex && i !== 0 && i !== activeIndex + 1}
-            pressed={item.key === forcePressedKey}
-          />
-        ),
-      }))}
-      className={cn(
-        'w-full',
-        '[&_.ant-tabs-nav]:m-0 [&_.ant-tabs-nav]:before:border-0',
-        '[&_.ant-tabs-nav-wrap]:overflow-visible',
-        '[&_.ant-tabs-nav-list]:w-full',
-        '[&_.ant-tabs-tab]:min-w-0 [&_.ant-tabs-tab]:flex-1 [&_.ant-tabs-tab]:p-0',
-        '[&_.ant-tabs-tab-btn]:w-full [&_.ant-tabs-tab-btn]:min-w-0',
-        '[&_.ant-tabs-ink-bar]:hidden [&_.ant-tabs-nav-operations]:hidden [&_.ant-tabs-content-holder]:hidden',
-        className,
-      )}
-    />
+    <LayoutGroup id={groupId}>
+      <AntTabs
+        activeKey={activeKey}
+        onChange={onChange}
+        animated={false}
+        items={items.map((item, i) => ({
+          key: item.key,
+          label: (
+            <TabFace
+              label={item.label}
+              active={i === activeIndex}
+              divider={i !== activeIndex && i !== 0 && i !== activeIndex + 1}
+              pressed={item.key === forcePressedKey}
+            />
+          ),
+        }))}
+        className={cn(
+          'w-full',
+          '[&_.ant-tabs-nav]:m-0 [&_.ant-tabs-nav]:before:border-0',
+          '[&_.ant-tabs-nav-wrap]:overflow-visible',
+          '[&_.ant-tabs-nav-list]:w-full',
+          '[&_.ant-tabs-tab]:min-w-0 [&_.ant-tabs-tab]:flex-1 [&_.ant-tabs-tab]:p-0',
+          '[&_.ant-tabs-tab-btn]:w-full [&_.ant-tabs-tab-btn]:min-w-0',
+          '[&_.ant-tabs-ink-bar]:hidden [&_.ant-tabs-nav-operations]:hidden [&_.ant-tabs-content-holder]:hidden',
+          className,
+        )}
+      />
+    </LayoutGroup>
   )
 }
