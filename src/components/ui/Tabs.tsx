@@ -1,7 +1,7 @@
 import { Tabs as AntTabs } from 'antd'
 import { LayoutGroup, motion } from 'motion/react'
-import { useId } from 'react'
-import { cn, pressPill, pressPillForced } from '../../lib/cn'
+import { useId, useState } from 'react'
+import { cn } from '../../lib/cn'
 import { selectionSlide } from '../../lib/motion'
 
 /*
@@ -89,21 +89,34 @@ function TabFace({
   divider,
   pressed,
   flushRight,
+  onPressStart,
+  onPressCancel,
 }: {
   label: string
   active: boolean
   divider: boolean
   pressed: boolean
   flushRight: boolean
+  onPressStart: () => void
+  onPressCancel: () => void
 }) {
   return (
-    <span data-tab-face className="group/press relative flex h-16 w-full min-w-0 items-center px-4">
+    <span
+      data-tab-face
+      onPointerDown={onPressStart}
+      onPointerLeave={onPressCancel}
+      onPointerCancel={onPressCancel}
+      className="relative flex h-16 w-full min-w-0 items-center px-4"
+    >
       {/* Pressed pill, always mounted under the active surface. It's the same
           colour as the active tab, so when a tapped tab becomes active the pill
           EXPANDS into the active shape (56 → 64 tall, radius 10 → square top /
           12 bottom) over the slide's duration while the active surface lands
           on it. When a tab stops being active its pill hides instantly, under
-          the departing surface, so two active shapes never show. */}
+          the departing surface, so two active shapes never show.
+          `pressed` comes from React state (pointerdown until the tab becomes
+          active), not CSS :active: :active ends on pointerup, a moment before
+          the click activates the tab, which made a held pill blink off and on. */}
       <span
         aria-hidden
         className={cn(
@@ -114,8 +127,11 @@ function TabFace({
                 'transition-[top,bottom,border-radius,opacity,scale] duration-(--motion-select) ease-(--motion-ease) motion-reduce:transition-none',
               ]
             : pressed
-              ? ['top-1 bottom-1 rounded-md', pressPillForced]
-              : ['top-1 bottom-1 rounded-md', pressPill, 'duration-0'],
+              ? [
+                  'top-1 bottom-1 rounded-md opacity-100 scale-100',
+                  'transition-[opacity,scale] duration-(--motion-press-in) ease-(--motion-ease) motion-reduce:transition-none',
+                ]
+              : 'top-1 bottom-1 rounded-md opacity-0 scale-90',
         )}
       />
       {active && <ActiveIndicator flushRight={flushRight} />}
@@ -131,7 +147,7 @@ function TabFace({
         <span
           aria-hidden
           data-tab-divider
-          className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider group-active/press:opacity-0"
+          className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider"
         />
       )}
     </span>
@@ -140,13 +156,22 @@ function TabFace({
 
 export function Tabs({ items, activeKey, onChange, className, forcePressedKey, flushEnd = false }: TabsProps) {
   const groupId = useId()
+  // The tab being pressed: set on pointerdown, cleared when the press is
+  // cancelled or the tab becomes active (in the same render, so the pill goes
+  // straight from pressed to expanding).
+  const [pressedKey, setPressedKey] = useState<string | null>(null)
+  const shownPressedKey = forcePressedKey ?? pressedKey
   const activeIndex = items.findIndex((i) => i.key === activeKey)
-  const pressedIndex = items.findIndex((i) => i.key === forcePressedKey)
+  const pressedIndex = items.findIndex((i) => i.key === shownPressedKey && i.key !== activeKey)
+  const handleChange = (key: string) => {
+    setPressedKey(null)
+    onChange(key)
+  }
   return (
     <LayoutGroup id={groupId}>
       <AntTabs
         activeKey={activeKey}
-        onChange={onChange}
+        onChange={handleChange}
         animated={false}
         items={items.map((item, i) => ({
           key: item.key,
@@ -161,8 +186,10 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey, f
                 i !== pressedIndex &&
                 (pressedIndex === -1 || i !== pressedIndex + 1)
               }
-              pressed={item.key === forcePressedKey}
+              pressed={i === pressedIndex}
               flushRight={flushEnd && i === items.length - 1}
+              onPressStart={() => setPressedKey(item.key)}
+              onPressCancel={() => setPressedKey((k) => (k === item.key ? null : k))}
             />
           ),
         }))}
@@ -173,8 +200,6 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey, f
           '[&_.ant-tabs-nav-list]:w-full',
           '[&_.ant-tabs-tab]:min-w-0 [&_.ant-tabs-tab]:flex-1 [&_.ant-tabs-tab]:p-0',
           '[&_.ant-tabs-tab-btn]:w-full [&_.ant-tabs-tab-btn]:min-w-0',
-          // hide the next tab's divider while this tab is pressed
-          '[&_.ant-tabs-tab:has([data-tab-face]:active)+.ant-tabs-tab_[data-tab-divider]]:opacity-0',
           '[&_.ant-tabs-ink-bar]:hidden [&_.ant-tabs-nav-operations]:hidden [&_.ant-tabs-content-holder]:hidden',
           className,
         )}
