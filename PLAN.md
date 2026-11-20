@@ -44,6 +44,21 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | AntD's `darkAlgorithm` recomputes `colorPrimary`: `#C42D5E` renders as `#AA2953` | Phase 2: pin brand colours per component (Button, Segmented, Tabs) so pink matches the token exactly. Good case-study point. |
 | Layer order verified in the browser: AntD emits into `@layer antd`; Tailwind's reset leaves AntD borders intact; a plain utility (`rounded-full`) overrides AntD without `!` | No change |
 
+### Findings from the ui/ wrappers (phase 2)
+
+| Finding | Resolution |
+|---|---|
+| Brand pink shift from `darkAlgorithm` | Resolved: every brand surface sets `bg-brand` in its wrapper; measured `#C42D5E` on Charge, the active segment and the tab strip |
+| Figma's active Tab has 12px **concave curves** at both top corners (not in the brief) | Drawn in `ui/Tabs` as two small SVGs in `text-surface`; AntD's nav-wrap set to `overflow-visible` so they show |
+| Figma Table pill is padding **3**/12 (22 tall), brief says 4/12 | Followed Figma. AntD Tag keeps a 1px transparent border, removed with `border-0` |
+| Figma Button component is 60 tall; the final screen uses 56 | Followed the final screen (56) |
+| Custom filled icons have "cut" layers that take the button colour | `ui/icons.tsx` uses `currentColor` for the shape and `--icon-cutout` (default `--bg-surface`) for cuts, instead of the export's hex |
+| `tailwind-merge` reads `shadow-tile` as a shadow *colour* | `lib/cn.ts` registers the custom shadow names; `tv` uses the same merger |
+| Brief: divider on "each inactive tab… except after active" would put one before the first tab | Also skipped on the first tab |
+| Raised pressed overlay | Done as a `background-image` gradient layer (`overlayPressed` in `lib/cn.ts`): above the fill, below the content, no extra element |
+
+Component gallery: `?view=gallery` (`src/dev/Gallery.tsx`) shows every wrapper in every state.
+
 ---
 
 ## 2. Folder structure
@@ -65,7 +80,8 @@ src/
 │  │  ├─ Segmented.tsx      view toggle + device switcher
 │  │  ├─ Tabs.tsx           category tabs: brand strip, dividers, joined surface
 │  │  ├─ Breadcrumb.tsx     48px crumbs, nav-arrow-right separator
-│  │  └─ Tag.tsx            table pill "T1"
+│  │  ├─ Tag.tsx            table pill "T1"
+│  │  └─ icons.tsx          filled map / view-grid / fire-flame / printer (from Figma)
 │  │
 │  ├─ tiles/                Custom. No library equivalent.
 │  │  ├─ TileShell.tsx      base + tint (overlay blend) + strip + press overlay; highlight/disabled props
@@ -97,8 +113,10 @@ src/
 │  ├─ menu.ts               normalises menu.json once (cents, tagged cells)
 │  ├─ types.ts
 │  └─ selectors.ts          cellsFor(tab, folder), breadcrumb, line totals, totals
+├─ dev/Gallery.tsx         ?view=gallery: every ui/ component in every state
 ├─ lib/
-│  ├─ cn.ts                 clsx + tailwind-merge
+│  ├─ cn.ts                 cn() + tv() with custom shadow names; overlayPressed
+│  ├─ usePress.ts           raised press: Motion tap → scale 0.97 + pressed flag
 │  ├─ money.ts              cents, formatting (incl. "−$3.00"), rounding
 │  └─ devices.ts            air11 / pro11 / android10 / pro13
 └─ theme/
