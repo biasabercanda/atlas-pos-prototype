@@ -14,7 +14,8 @@ import { selectionSlide } from '../../lib/motion'
  *   Pressed:  bg-surface (same as the active tab; Figma uses bg-raised), radius 10,
  *             56 tall (Figma) centred in the 64 tab;
  *             the dividers on both sides hide while pressed. The pill grows
- *             in on press and fades out on release (pressPill, motion tokens).
+ *             in on press (pressPill) and, as the tab becomes active, expands
+ *             into the active shape instead of fading out.
  * Tabs fill the width equally; long labels truncate.
  *
  * The active look (surface + curves + strip) is one shared Motion element
@@ -97,12 +98,25 @@ function TabFace({
 }) {
   return (
     <span data-tab-face className="group/press relative flex h-16 w-full min-w-0 items-center px-4">
-      {/* Always mounted, under the active surface: when a tapped tab becomes
-          active, its pill fades out behind the arriving surface instead of
-          vanishing on the spot (which read as a flash on quick taps). */}
+      {/* Pressed pill, always mounted under the active surface. It's the same
+          colour as the active tab, so when a tapped tab becomes active the pill
+          EXPANDS into the active shape (56 → 64 tall, radius 10 → square top /
+          12 bottom) over the slide's duration while the active surface lands
+          on it. When a tab stops being active its pill hides instantly, under
+          the departing surface, so two active shapes never show. */}
       <span
         aria-hidden
-        className={cn('absolute inset-x-0 inset-y-1 rounded-md bg-surface', pressed ? pressPillForced : pressPill)}
+        className={cn(
+          'absolute inset-x-0 bg-surface',
+          active
+            ? [
+                'top-0 bottom-0 rounded-t-none rounded-b-lg opacity-100 scale-100',
+                'transition-[top,bottom,border-radius,opacity,scale] duration-(--motion-select) ease-(--motion-ease) motion-reduce:transition-none',
+              ]
+            : pressed
+              ? ['top-1 bottom-1 rounded-md', pressPillForced]
+              : ['top-1 bottom-1 rounded-md', pressPill, 'duration-0'],
+        )}
       />
       {active && <ActiveIndicator flushRight={flushRight} />}
       <span
