@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'motion/react'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useAnimate } from 'motion/react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { cn } from '../../lib/cn'
 import { tapFeedback } from '../../lib/motion'
 
@@ -27,12 +27,21 @@ const MIN_COUNT_WIDTH = 26
 
 function CountBadge({ count, onWidth }: { count: number; onWidth: (w: number) => void }) {
   const ref = useRef<HTMLSpanElement>(null)
-  // The number ticks only when the count changes after mount, not on page load.
-  const [mountCount] = useState(count)
-  const tick = count !== mountCount
   useLayoutEffect(() => {
     if (ref.current) onWidth(ref.current.offsetWidth)
   }, [count, onWidth])
+
+  // The number ticks whenever the count changes after mount (not on page load).
+  // Run imperatively: a remount-based `initial` would be suppressed by the
+  // surrounding AnimatePresence initial={false} for badges present on load.
+  const [numberRef, animate] = useAnimate<HTMLSpanElement>()
+  const prevCount = useRef(count)
+  useEffect(() => {
+    if (count !== prevCount.current && numberRef.current) {
+      animate(numberRef.current, { scale: [1.3, 1] }, tapFeedback)
+    }
+    prevCount.current = count
+  }, [count, animate, numberRef])
 
   return (
     <motion.span
@@ -45,15 +54,9 @@ function CountBadge({ count, onWidth }: { count: number; onWidth: (w: number) =>
       style={{ originX: 1 }}
       className={cn(pill, 'absolute top-0 right-0 bg-badge text-badge-text')}
     >
-      <motion.span
-        key={count}
-        initial={tick ? { scale: 1.3 } : false}
-        animate={{ scale: 1 }}
-        transition={tapFeedback}
-        className="inline-block"
-      >
+      <span ref={numberRef} className="inline-block">
         {count}
-      </motion.span>
+      </span>
     </motion.span>
   )
 }

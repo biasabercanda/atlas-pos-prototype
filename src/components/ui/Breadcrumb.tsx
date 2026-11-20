@@ -1,6 +1,7 @@
 import { Breadcrumb as AntBreadcrumb } from 'antd'
 import { NavArrowRight } from 'iconoir-react'
-import { motion } from 'motion/react'
+import { motion, useAnimate } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { cn } from '../../lib/cn'
 import { tapFeedback } from '../../lib/motion'
 
@@ -18,6 +19,28 @@ import { tapFeedback } from '../../lib/motion'
  */
 
 const slideIn = { initial: { opacity: 0, x: -8 }, animate: { opacity: 1, x: 0 }, transition: tapFeedback }
+
+/**
+ * The first crumb is the active tab. When the tab changes (Kebabs → Drinks)
+ * its label slides in the same way a new crumb does. Not on page load, and
+ * not when only a folder closes (the label is unchanged then). The grid
+ * itself switches instantly.
+ */
+function TabCrumbLabel({ label }: { label: string }) {
+  const [scope, animate] = useAnimate<HTMLSpanElement>()
+  const prevLabel = useRef(label)
+  useEffect(() => {
+    if (label !== prevLabel.current && scope.current) {
+      animate(scope.current, { opacity: [0, 1], x: [-8, 0] }, tapFeedback)
+    }
+    prevLabel.current = label
+  }, [label, animate, scope])
+  return (
+    <span ref={scope} className="truncate">
+      {label}
+    </span>
+  )
+}
 
 export interface BreadcrumbItem {
   label: string
@@ -58,11 +81,11 @@ export function Breadcrumb({ items, className, forceState }: BreadcrumbProps) {
                   : 'cursor-pointer text-muted active:text-secondary active:duration-(--motion-press-in)',
             )}
           >
-            <span className="truncate">{item.label}</span>
+            {i === 0 ? <TabCrumbLabel label={item.label} /> : <span className="truncate">{item.label}</span>}
           </button>
         )
         return {
-          // The first crumb never animates (it's the tab itself); deeper ones slide in.
+          // The first crumb (the tab) animates its label on tab change; deeper crumbs slide in on mount.
           title: i === 0 ? crumb : <motion.span {...slideIn} className="flex min-w-0">{crumb}</motion.span>,
         }
       })}
