@@ -191,6 +191,7 @@
   --duration-250: 250ms;
   --duration-300: 300ms;
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);  /* fast start, soft landing */
+  --ease-in-quint: cubic-bezier(0.64, 0, 0.78, 0);   /* slow start, finishes fast */
 
   --motion-press-in: var(--duration-100);    /* pressed pill appearing */
   --motion-press-out: var(--duration-150);   /* pressed pill leaving on release */
@@ -198,6 +199,7 @@
   --motion-feedback: var(--duration-150);    /* confirmation of a tap: badge pop, new order line, new crumb */
   --motion-frame: var(--duration-250);       /* device frame resizing (presentation shell) */
   --motion-ease: var(--ease-out-quint);      /* default easing for all of the above */
+  --motion-ease-arrive: var(--ease-in-quint); /* something that must finish exactly as a moving element arrives (surface corner squaring under the last tab) */
 
   /* ── Spacing v2 (8px scale) ── */
   --spacing-4: 4px;

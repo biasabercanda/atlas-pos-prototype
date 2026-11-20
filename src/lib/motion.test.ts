@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import css from '../theme/tokens.css?raw'
-import { duration, easeOutQuint, motionTokens } from './motion'
+import { duration, easeInQuint, easeOutQuint, motionTokens } from './motion'
 
 /* motion.ts mirrors the motion tokens in tokens.css; this keeps them in sync. */
 
@@ -26,6 +26,7 @@ describe('motion tokens', () => {
 
   it('easing matches', () => {
     expect(cssVar('ease-out-quint')).toBe(`cubic-bezier(${easeOutQuint.join(', ')})`)
+    expect(cssVar('ease-in-quint')).toBe(`cubic-bezier(${easeInQuint.join(', ')})`)
   })
 
   it('semantic tokens resolve to the same values', () => {
@@ -35,5 +36,6 @@ describe('motion tokens', () => {
     expect(resolve('motion-feedback')).toBe(`${motionTokens.feedback}ms`)
     expect(resolve('motion-frame')).toBe(`${motionTokens.frame}ms`)
     expect(resolve('motion-ease')).toBe(`cubic-bezier(${motionTokens.ease.join(', ')})`)
+    expect(resolve('motion-ease-arrive')).toBe(`cubic-bezier(${motionTokens.easeArrive.join(', ')})`)
   })
 })

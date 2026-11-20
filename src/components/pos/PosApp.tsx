@@ -1,8 +1,5 @@
-import { useReducedMotion } from 'motion/react'
-import { useEffect, useState } from 'react'
 import { menu } from '../../data/menu'
 import { cn } from '../../lib/cn'
-import { motionTokens } from '../../lib/motion'
 import { usePosState } from '../../store/context'
 import { CategoryTabs } from './CategoryTabs'
 import { Header } from './Header/Header'
@@ -23,36 +20,20 @@ import { OrderPanel } from './OrderPanel/OrderPanel'
  * render any tablet size inside a desktop browser. It fills its parent.
  *
  * The surface's bottom-right corner is rounded, except while the last tab is
- * active: that tab sits flush under the corner, so the corner goes square
- * (once the tab has slid into place) and the tab's right side continues the
- * surface edge straight down.
+ * active: that tab sits flush under the corner, so the corner goes square and
+ * the tab's right side continues the surface edge straight down.
+ * The radius animates instead of flipping:
+ *   arriving: 12 → 0 over the tab's own slide (--motion-select) with an ease-in
+ *             (--motion-ease-arrive), so it stays rounded while the tab travels
+ *             and squares off as the tab arrives underneath;
+ *   leaving:  0 → 12 quickly (--motion-feedback, ease-out), as the tab pulls away.
  */
 
 const lastTabId = menu.tabs[menu.tabs.length - 1].id
 
-/**
- * Whether the surface's bottom-right corner should be square. It squares only
- * after the active tab has finished sliding under it (--motion-select), so the
- * user never sees a square corner with nothing beneath it. Leaving the last tab
- * rounds it again straight away.
- */
-function useSquareCorner(lastTabActive: boolean) {
-  const reduceMotion = useReducedMotion()
-  const [squared, setSquared] = useState(lastTabActive)
-  // Leaving the last tab: round immediately (state adjusted during render).
-  if (!lastTabActive && squared) setSquared(false)
-  useEffect(() => {
-    if (!lastTabActive) return
-    const timer = setTimeout(() => setSquared(true), reduceMotion ? 0 : motionTokens.select)
-    return () => clearTimeout(timer)
-  }, [lastTabActive, reduceMotion])
-  return lastTabActive && squared
-}
-
 export function PosApp() {
   const { activeTabId } = usePosState()
   const lastTabActive = activeTabId === lastTabId
-  const squareCorner = useSquareCorner(lastTabActive)
   return (
     <div
       data-pos-app
@@ -63,7 +44,10 @@ export function PosApp() {
         <main
           className={cn(
             'flex min-h-0 flex-1 flex-col gap-4 bg-surface p-4',
-            squareCorner ? 'rounded-br-none' : 'rounded-br-lg',
+            'transition-[border-bottom-right-radius] motion-reduce:transition-none',
+            lastTabActive
+              ? 'rounded-br-none duration-(--motion-select) ease-(--motion-ease-arrive)'
+              : 'rounded-br-lg duration-(--motion-feedback) ease-(--motion-ease)',
           )}
         >
           <Header />

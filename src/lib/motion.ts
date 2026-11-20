@@ -17,6 +17,8 @@ export const duration = {
 
 /** --ease-out-quint */
 export const easeOutQuint = [0.22, 1, 0.36, 1] as const
+/** --ease-in-quint */
+export const easeInQuint = [0.64, 0, 0.78, 0] as const
 
 /** Semantic tokens, in ms (same names as tokens.css, without "--motion-"). */
 export const motionTokens = {
@@ -26,6 +28,7 @@ export const motionTokens = {
   feedback: duration[150],
   frame: duration[250],
   ease: easeOutQuint,
+  easeArrive: easeInQuint,
 } as const
 
 const ms = (value: number) => value / 1000
