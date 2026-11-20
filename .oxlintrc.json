@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["antd", "antd/*", "@ant-design/*"],
+            "message": "Import AntD only inside src/components/ui/. Use the wrapper from components/ui instead."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/components/ui/**", "src/theme/**", "src/App.tsx"],
+      "rules": { "no-restricted-imports": "off" }
+    }
+  ]
+}

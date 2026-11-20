@@ -1,0 +1,247 @@
+/*
+ * Atlas POS · design tokens (from Figma Foundations → "Atlas POS · Variables & styles")
+ * Two layers: Primitives (50–950 scales) → Color (semantic tokens, single mode).
+ * Use ONLY semantic tokens in components. Need lighter/darker? Point the semantic token at another step.
+ * Primitive names match the Figma WEB code syntax (e.g. var(--blue-400)).
+ */
+
+:root {
+  /* ── Primitives v3 · neutral (text + surfaces; extra dark steps) ── */
+  --neutral-0: #FFFFFF;
+  --neutral-100: #F4F5F7;
+  --neutral-200: #C9CCD6;
+  --neutral-300: #A9AEBB;
+  --neutral-400: #878996;
+  --neutral-500: #6B6F86;
+  --neutral-600: #3D3E4D;
+  --neutral-650: #343540;
+  --neutral-700: #2A2B33;
+  --neutral-725: #272830;
+  --neutral-750: #23242D;
+  --neutral-800: #1F1F29;
+  --neutral-850: #1B1B24;
+  --neutral-900: #15171E;
+  --neutral-925: #14151D;
+  --neutral-950: #0E0E13;
+
+  /* ── Primitives v3 · pink (OKLCH H 7°, 50 lightest → 950 darkest) ── */
+  --pink-50: #FFF1F3;
+  --pink-100: #FFE1E6;
+  --pink-200: #FFC4CE;
+  --pink-300: #FF9DB0;
+  --pink-400: #E75A7F;
+  --pink-500: #C42D5E;
+  --pink-600: #A51149;
+  --pink-700: #870039;
+  --pink-800: #6C012C;
+  --pink-900: #50031F;
+  --pink-950: #300713;
+
+  /* ── Primitives v3 · orange (OKLCH H 52°, 50 lightest → 950 darkest) ── */
+  --orange-50: #FFF2EB;
+  --orange-100: #FDE4D5;
+  --orange-200: #F7CBB1;
+  --orange-300: #ECAE88;
+  --orange-400: #D2824E;
+  --orange-500: #BB672B;
+  --orange-600: #9D4C04;
+  --orange-700: #7D3B00;
+  --orange-800: #612C01;
+  --orange-900: #471E00;
+  --orange-950: #2C1302;
+
+  /* ── Primitives v3 · amber (OKLCH H 87°, 50 lightest → 950 darkest) ── */
+  --amber-50: #FAF5E8;
+  --amber-100: #F3E9D0;
+  --amber-200: #E7D4A8;
+  --amber-300: #E2C06F;
+  --amber-350: #CAA95B;
+  --amber-400: #B89332;
+  --amber-500: #9F7A00;
+  --amber-600: #7F6101;
+  --amber-700: #644C01;
+  --amber-800: #4E3A00;
+  --amber-900: #382900;
+  --amber-950: #1D1A10;
+
+  /* ── Primitives v3 · green (OKLCH H 152°, 50 lightest → 950 darkest) ── */
+  --green-50: #EDF9EF;
+  --green-100: #D9F1DE;
+  --green-200: #B9E2C3;
+  --green-300: #92CFA2;
+  --green-400: #59AD73;
+  --green-500: #379659;
+  --green-600: #117A3F;
+  --green-700: #02602F;
+  --green-800: #014A23;
+  --green-900: #003617;
+  --green-950: #04210E;
+
+  /* ── Primitives v3 · teal (OKLCH H 193°, 50 lightest → 950 darkest) ── */
+  --teal-50: #E9F9F8;
+  --teal-100: #D1F1EF;
+  --teal-200: #A9E3E0;
+  --teal-300: #77D0CC;
+  --teal-400: #06AEAB;
+  --teal-500: #019391;
+  --teal-600: #027573;
+  --teal-700: #005C5B;
+  --teal-800: #004746;
+  --teal-900: #003332;
+  --teal-950: #00201F;
+
+  /* ── Primitives v3 · blue (OKLCH H 262°, 50 lightest → 950 darkest) ── */
+  --blue-50: #F0F5FF;
+  --blue-100: #DFEAFF;
+  --blue-200: #C1D7FF;
+  --blue-300: #9FBEF8;
+  --blue-400: #6F97E2;
+  --blue-500: #557ECD;
+  --blue-600: #3C63AF;
+  --blue-700: #2A4D90;
+  --blue-800: #1E3A72;
+  --blue-900: #152952;
+  --blue-950: #0D1A32;
+
+  /* ── Primitives v3 · violet (OKLCH H 307°, 50 lightest → 950 darkest) ── */
+  --violet-50: #F8F2FF;
+  --violet-100: #EFE4FC;
+  --violet-200: #E0CCF6;
+  --violet-300: #CDAFEB;
+  --violet-400: #AC84D2;
+  --violet-500: #9569BC;
+  --violet-600: #7A4F9F;
+  --violet-700: #613B81;
+  --violet-800: #4B2C66;
+  --violet-900: #361F49;
+  --violet-950: #21132D;
+
+  /* ── Primitives v3 · alpha (category overlays, 10%) ── */
+  --blue-400-a10: rgb(111 151 226 / 0.10);
+  --orange-400-a10: rgb(210 130 78 / 0.10);
+  --amber-400-a10: rgb(184 147 50 / 0.10);
+  --teal-400-a10: rgb(6 174 171 / 0.10);
+  --violet-400-a10: rgb(172 132 210 / 0.10);
+
+  /* ── Semantic · surfaces ── */
+  --bg-app: var(--neutral-925);           /* behind panels, order panel */
+  --bg-surface: var(--neutral-750);       /* menu surface, secondary buttons */
+  --bg-raised: var(--neutral-800);        /* order header, cashier pill */
+  --bg-inset: var(--neutral-950);         /* view-toggle track */
+  --bg-tile-base: var(--neutral-700);     /* product/folder/open-item tile base */
+  --effect-top-light: var(--neutral-0);   /* used at 12% as inner highlight */
+  --bg-overlay-pressed: rgb(0 0 0 / 0.14); /* added in code: pressed layer on raised tiles + buttons */
+  --bg-presentation: var(--neutral-950);  /* added in code: page behind the framed device */
+
+  /* ── Semantic · text ── */
+  --text-primary: var(--neutral-100);
+  --text-secondary: var(--neutral-200);   /* also header icons */
+  --text-muted: var(--neutral-300);       /* qty, subtotal, labels, inactive tabs */
+  --text-disabled: var(--neutral-400);    /* sold-out item names */
+  --text-faint: var(--neutral-500);
+  --text-inverse: var(--neutral-900);     /* on light pills */
+  --text-on-accent: var(--neutral-0);     /* on brand pink */
+
+  /* ── Semantic · borders ── */
+  --border-divider: var(--neutral-600);
+  --border-empty-slot: var(--neutral-650);
+  --border-surface-edge: var(--neutral-850);
+
+  /* ── Semantic · brand, status, badges ── */
+  --accent-brand: var(--pink-500);        /* Charge, active toggle, active tab strip */
+  --status-online: var(--green-400);
+  --badge-count-bg: var(--neutral-0);
+  --badge-count-text: var(--neutral-900);
+  --badge-best-seller-bg: var(--amber-300);
+  --badge-best-seller-text: var(--amber-950);
+
+  /* ── Semantic · order actions ── */
+  --action-hold-icon: var(--amber-350);
+  --action-fire-icon: var(--orange-400);
+  --action-print-icon: var(--blue-400);
+
+  /* ── Semantic · categories ──
+   * mark    = strip on product tiles, flap on folders (full colour, step 400)
+   * overlay = tile tint: separate layer over the tile base, mix-blend-mode: overlay, 10% alpha
+   */
+  --category-blue-mark: var(--blue-400);
+  --category-orange-mark: var(--orange-400);
+  --category-amber-mark: var(--amber-400);
+  --category-teal-mark: var(--teal-400);
+  --category-violet-mark: var(--violet-400);
+
+  --category-blue-overlay: var(--blue-400-a10);
+  --category-orange-overlay: var(--orange-400-a10);
+  --category-amber-overlay: var(--amber-400-a10);
+  --category-teal-overlay: var(--teal-400-a10);
+  --category-violet-overlay: var(--violet-400-a10);
+
+  /* ── Spacing v2 (8px scale) ── */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+}
+
+/* Tailwind v4 mapping — lets you write bg-surface, text-muted, border-divider, rounded-lg, shadow-tile … */
+@theme inline {
+  --color-app: var(--bg-app);
+  --color-surface: var(--bg-surface);
+  --color-raised: var(--bg-raised);
+  --color-inset: var(--bg-inset);
+  --color-tile: var(--bg-tile-base);
+  --color-overlay-pressed: var(--bg-overlay-pressed);
+  --color-presentation: var(--bg-presentation);
+
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-disabled: var(--text-disabled);
+  --color-faint: var(--text-faint);
+  --color-inverse: var(--text-inverse);
+  --color-on-accent: var(--text-on-accent);
+
+  --color-divider: var(--border-divider);
+  --color-empty-slot: var(--border-empty-slot);
+  --color-surface-edge: var(--border-surface-edge);
+
+  --color-brand: var(--accent-brand);
+  --color-online: var(--status-online);
+  --color-badge: var(--badge-count-bg);
+  --color-badge-text: var(--badge-count-text);
+  --color-best-seller: var(--badge-best-seller-bg);
+  --color-best-seller-text: var(--badge-best-seller-text);
+
+  --color-hold: var(--action-hold-icon);
+  --color-fire: var(--action-fire-icon);
+  --color-print: var(--action-print-icon);
+
+  --color-cat-blue: var(--category-blue-mark);
+  --color-cat-orange: var(--category-orange-mark);
+  --color-cat-amber: var(--category-amber-mark);
+  --color-cat-teal: var(--category-teal-mark);
+  --color-cat-violet: var(--category-violet-mark);
+
+  /* Radius (Figma "Radius" collection) */
+  --radius-sm: 8px;    /* buttons */
+  --radius-md: 10px;   /* folders, toggle segments */
+  --radius-lg: 12px;   /* product tiles, order header, grid panels */
+  --radius-xl: 14px;
+
+  /* Effects (Figma effect styles) */
+  /* Tiles + Open item — "Shadow/Tile" */
+  --shadow-tile: 0 1.5px 3.5px rgb(0 0 0 / 0.24), inset 0 2px 0 rgb(255 255 255 / 0.12), inset 0 -1.5px 0 rgb(0 0 0 / 0.21);
+  /* Secondary buttons + Charge — "Shadow/Button" */
+  --shadow-button: 0 2px 6px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -2px 0 rgb(0 0 0 / 0.30);
+  /* Pills, order header — "Shadow/Soft" */
+  --shadow-soft: 0 2px 6px rgb(0 0 0 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.06);
+  /* Pressed buttons — "Shadow/Pressed" */
+  --shadow-pressed: inset 0 2px 6px rgb(0 0 0 / 0.45);
+  /* Count + best-seller badges — "Shadow/Badge" */
+  --shadow-badge: 0 2px 6px rgb(0 0 0 / 0.40);
+
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+}

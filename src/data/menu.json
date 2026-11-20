@@ -1,0 +1,137 @@
+{
+  "_note": "Dummy menu for the Atlas POS code prototype. Prices in USD. 'color' maps to category tokens (--category-{color}-mark / -overlay). Grid is 5 columns × 4 rows; 'layout' lists cells in reading order, null = empty slot. The Kebabs tab reproduces the Figma final exactly.",
+  "currency": "USD",
+  "pricing": {
+    "_note": "Total = subtotal + 20% (tax + service), rounded to the nearest 0.10. Matches Figma: 42.70 → 51.20.",
+    "surchargeRate": 0.2,
+    "roundTo": 0.1
+  },
+  "initialOrder": {
+    "id": 1315,
+    "table": "T1",
+    "lines": [
+      { "itemId": "chicken-doner", "qty": 2 },
+      { "itemId": "lamb-doner", "qty": 1 }
+    ]
+  },
+  "items": {
+    "chicken-doner": { "name": "Chicken Döner Kebab", "price": 12.9, "color": "blue", "bestSeller": true },
+    "falafel-doner": { "name": "Falafel Döner Kebab", "price": 11.5, "color": "blue", "soldOut": true },
+    "jackfruit-doner": { "name": "Pulled Jackfruit Döner Kebab", "price": 12.5, "color": "blue" },
+    "lamb-doner": { "name": "Lamb Döner Kebab", "price": 16.9, "color": "blue" },
+    "chicken-lamb-doner": { "name": "Chicken & Lamb Döner Kebab", "price": 15.9, "color": "blue" },
+    "diy-doner": { "name": "DIY Döner", "price": 13.5, "color": "blue" },
+    "butter-chicken-doner": { "name": "Butter Chicken Döner Kebab", "price": 14.5, "color": "orange", "bestSeller": true },
+    "mala-kebab": { "name": "Mala Kebab", "price": 14.9, "color": "orange", "soldOut": true },
+
+    "chicken-gyros": { "name": "Chicken Gyros", "price": 13.5, "color": "amber", "bestSeller": true },
+    "pork-gyros": { "name": "Pork Gyros", "price": 13.5, "color": "amber" },
+    "lamb-gyros": { "name": "Lamb Gyros", "price": 15.5, "color": "amber" },
+    "halloumi-gyros": { "name": "Halloumi Gyros", "price": 12.9, "color": "amber" },
+    "falafel-gyros": { "name": "Falafel Gyros", "price": 11.9, "color": "amber" },
+    "mixed-gyros": { "name": "Mixed Gyros", "price": 16.5, "color": "amber" },
+    "gyros-plate": { "name": "Gyros Plate", "price": 18.9, "color": "amber" },
+    "kids-gyros": { "name": "Kids Gyros", "price": 8.9, "color": "amber" },
+    "spicy-chicken-gyros": { "name": "Spicy Chicken Gyros", "price": 13.9, "color": "amber", "soldOut": true },
+    "gyros-box": { "name": "Gyros Box", "price": 14.5, "color": "amber" },
+    "vegan-gyros": { "name": "Vegan Gyros", "price": 12.5, "color": "amber" },
+    "gyros-pita": { "name": "Gyros Pita (Small)", "price": 9.5, "color": "amber" },
+
+    "chicken-shawarma": { "name": "Chicken Shawarma Roll", "price": 12.9, "color": "teal", "bestSeller": true },
+    "beef-shawarma": { "name": "Beef Shawarma Roll", "price": 14.5, "color": "teal" },
+    "lamb-shawarma": { "name": "Lamb Shawarma Roll", "price": 15.5, "color": "teal" },
+    "falafel-shawarma": { "name": "Falafel Shawarma Roll", "price": 11.5, "color": "teal" },
+    "mixed-shawarma": { "name": "Mixed Shawarma Roll", "price": 16.5, "color": "teal" },
+    "garlic-chicken-shawarma": { "name": "Garlic Chicken Roll", "price": 13.5, "color": "teal" },
+    "spicy-beef-shawarma": { "name": "Spicy Beef Roll", "price": 14.9, "color": "teal" },
+    "halloumi-shawarma": { "name": "Halloumi Roll", "price": 12.5, "color": "teal", "soldOut": true },
+    "shawarma-plate": { "name": "Shawarma Plate", "price": 18.9, "color": "teal" },
+    "kids-shawarma": { "name": "Kids Shawarma Roll", "price": 8.9, "color": "teal" },
+    "shawarma-box": { "name": "Shawarma Box", "price": 14.5, "color": "teal" },
+    "vegan-shawarma": { "name": "Vegan Shawarma Roll", "price": 12.5, "color": "teal" },
+
+    "chicken-tikka-kathi": { "name": "Chicken Tikka Kathi Roll", "price": 12.9, "color": "violet", "bestSeller": true },
+    "paneer-kathi": { "name": "Paneer Kathi Roll", "price": 11.9, "color": "violet" },
+    "egg-kathi": { "name": "Egg Kathi Roll", "price": 9.9, "color": "violet" },
+    "lamb-seekh-kathi": { "name": "Lamb Seekh Kathi Roll", "price": 14.5, "color": "violet" },
+    "aloo-kathi": { "name": "Aloo Kathi Roll", "price": 9.5, "color": "violet" },
+    "double-chicken-kathi": { "name": "Double Chicken Kathi Roll", "price": 15.9, "color": "violet", "soldOut": true },
+
+    "rice-bowl": { "name": "Döner Rice Bowl", "price": 14.9, "color": "orange" },
+    "salad-bowl": { "name": "Döner Salad Bowl", "price": 13.9, "color": "orange" },
+    "fries": { "name": "Fries", "price": 4.5, "color": "orange", "bestSeller": true },
+    "cheesy-fries": { "name": "Cheesy Fries", "price": 6.5, "color": "orange" },
+    "hummus": { "name": "Hummus & Pita", "price": 6.9, "color": "orange" },
+    "garlic-sauce": { "name": "Extra Garlic Sauce", "price": 1.0, "color": "orange" },
+    "chilli-sauce": { "name": "Extra Chilli Sauce", "price": 1.0, "color": "orange", "soldOut": true },
+
+    "cola": { "name": "Cola", "price": 3.5, "color": "teal" },
+    "cola-zero": { "name": "Cola Zero", "price": 3.5, "color": "teal" },
+    "ayran": { "name": "Ayran", "price": 3.9, "color": "teal", "bestSeller": true },
+    "mango-lassi": { "name": "Mango Lassi", "price": 5.5, "color": "teal" },
+    "water": { "name": "Still Water", "price": 2.5, "color": "teal" },
+    "sparkling": { "name": "Sparkling Water", "price": 2.9, "color": "teal" },
+    "iced-tea": { "name": "Peach Iced Tea", "price": 4.5, "color": "teal", "soldOut": true },
+
+    "staff-meal": { "name": "Staff Meal −50%", "price": 0, "color": "violet", "discount": { "type": "percent", "value": 50 } },
+    "student": { "name": "Student −10%", "price": 0, "color": "violet", "discount": { "type": "percent", "value": 10 } },
+    "combo-deal": { "name": "Combo Deal −$3", "price": -3.0, "color": "violet" }
+  },
+  "folders": {
+    "gyros": { "name": "Gyros", "color": "amber", "items": ["chicken-gyros", "pork-gyros", "lamb-gyros", "halloumi-gyros", "falafel-gyros", "mixed-gyros", "gyros-plate", "kids-gyros", "spicy-chicken-gyros", "gyros-box", "vegan-gyros", "gyros-pita"] },
+    "shawarma-rolls": { "name": "Shawarma Rolls", "color": "teal", "items": ["chicken-shawarma", "beef-shawarma", "lamb-shawarma", "falafel-shawarma", "mixed-shawarma", "garlic-chicken-shawarma", "spicy-beef-shawarma", "halloumi-shawarma", "shawarma-plate", "kids-shawarma", "shawarma-box", "vegan-shawarma"] },
+    "kathi-rolls": { "name": "Kathi Rolls", "color": "violet", "items": ["chicken-tikka-kathi", "paneer-kathi", "egg-kathi", "lamb-seekh-kathi", "aloo-kathi", "double-chicken-kathi"] }
+  },
+  "tabs": [
+    {
+      "id": "kebabs",
+      "name": "Kebabs",
+      "layout": [
+        { "item": "chicken-doner" }, { "item": "falafel-doner" }, { "item": "jackfruit-doner" }, { "item": "lamb-doner" }, { "item": "chicken-lamb-doner" },
+        { "item": "diy-doner" }, { "item": "butter-chicken-doner" }, { "item": "mala-kebab" }, null, null,
+        null, null, null, null, null,
+        null, { "openItem": true }, { "folder": "gyros" }, { "folder": "shawarma-rolls" }, { "folder": "kathi-rolls" }
+      ]
+    },
+    {
+      "id": "bowls-sides",
+      "name": "Bowls & Sides",
+      "layout": [
+        { "item": "rice-bowl" }, { "item": "salad-bowl" }, { "item": "fries" }, { "item": "cheesy-fries" }, { "item": "hummus" },
+        { "item": "garlic-sauce" }, { "item": "chilli-sauce" }, null, null, null,
+        null, null, null, null, null,
+        null, { "openItem": true }, null, null, null
+      ]
+    },
+    {
+      "id": "gyros-shawarma-rolls",
+      "name": "Gyros, Shawarma and Kathi Rolls",
+      "layout": [
+        { "folder": "gyros" }, { "folder": "shawarma-rolls" }, { "folder": "kathi-rolls" }, null, null,
+        null, null, null, null, null,
+        null, null, null, null, null,
+        null, { "openItem": true }, null, null, null
+      ]
+    },
+    {
+      "id": "drinks",
+      "name": "Drinks",
+      "layout": [
+        { "item": "cola" }, { "item": "cola-zero" }, { "item": "ayran" }, { "item": "mango-lassi" }, { "item": "water" },
+        { "item": "sparkling" }, { "item": "iced-tea" }, null, null, null,
+        null, null, null, null, null,
+        null, { "openItem": true }, null, null, null
+      ]
+    },
+    {
+      "id": "discounts",
+      "name": "Discounts",
+      "layout": [
+        { "item": "staff-meal" }, { "item": "student" }, { "item": "combo-deal" }, null, null,
+        null, null, null, null, null,
+        null, null, null, null, null,
+        null, null, null, null, null
+      ]
+    }
+  ]
+}
