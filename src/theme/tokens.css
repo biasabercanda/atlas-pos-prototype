@@ -176,6 +176,9 @@
   --category-teal-overlay: var(--teal-400-a10);
   --category-violet-overlay: var(--violet-400-a10);
 
+  /* ── Motion (added in code) · JS presets live in src/lib/motion.ts ── */
+  --motion-press-fade: 120ms;             /* flat pressed background fading out on release */
+
   /* ── Spacing v2 (8px scale) ── */
   --spacing-4: 4px;
   --spacing-8: 8px;

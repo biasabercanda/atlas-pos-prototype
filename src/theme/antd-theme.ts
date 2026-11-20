@@ -53,9 +53,10 @@ export const atlasTheme: ThemeConfig = {
       trackPadding: 0,
       itemColor: t.textSecondary,
       itemHoverColor: t.textSecondary,
+      // Selected thumb and pressed background are drawn by ui/Segmented (Motion thumb + :active layer)
       itemHoverBg: 'transparent',
-      itemActiveBg: t.raised,
-      itemSelectedBg: t.brand,
+      itemActiveBg: 'transparent',
+      itemSelectedBg: 'transparent',
       itemSelectedColor: '#FFFFFF', // --text-on-accent (neutral-0)
     },
     Tabs: {

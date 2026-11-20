@@ -2,6 +2,7 @@ import { Tabs as AntTabs } from 'antd'
 import { LayoutGroup, motion } from 'motion/react'
 import { useId } from 'react'
 import { cn } from '../../lib/cn'
+import { selectionSlide } from '../../lib/motion'
 
 /*
  * Figma: Components → Navigation & header → Tab (40:1361), BRIEF §5
@@ -10,7 +11,9 @@ import { cn } from '../../lib/cn'
  *   Active:   14 Extra Bold text-primary, bg-surface (joins the surface above),
  *             radius 0 0 12 12, 12px concave curves at both top corners,
  *             5px bg-brand strip inset 16, flush with the bottom.
- *   Pressed:  bg-raised, radius 10.
+ *   Pressed:  bg-raised, radius 10, 56 tall (Figma) centred in the 64 tab;
+ *             the dividers on both sides hide while pressed. Appears on the
+ *             first frame, fades out on release (--motion-press-fade).
  * Tabs fill the width equally; long labels truncate.
  *
  * The active look (surface + curves + strip) is one shared Motion element
@@ -21,8 +24,6 @@ import { cn } from '../../lib/cn'
  * Its own visuals (ink bar, nav border, overflow menu, panes) are switched off
  * and each tab's visuals are drawn by <TabFace>.
  */
-
-const slide = { type: 'spring', bounce: 0, duration: 0.3 } as const
 
 export interface TabItem {
   key: string
@@ -60,7 +61,7 @@ function ActiveIndicator() {
   return (
     <motion.span
       layoutId="tab-active"
-      transition={slide}
+      transition={selectionSlide}
       aria-hidden
       className="absolute inset-0 rounded-b-lg bg-surface"
     >
@@ -83,13 +84,18 @@ function TabFace({
   pressed: boolean
 }) {
   return (
-    <span
-      className={cn(
-        'relative flex h-16 w-full min-w-0 items-center px-4',
-        !active && (pressed ? 'rounded-md bg-raised' : 'rounded-md active:bg-raised'),
-      )}
-    >
+    <span data-tab-face className="group/tab relative flex h-16 w-full min-w-0 items-center px-4">
       {active && <ActiveIndicator />}
+      {!active && (
+        <span
+          aria-hidden
+          className={cn(
+            'absolute inset-x-0 inset-y-1 rounded-md bg-raised',
+            'transition-opacity duration-(--motion-press-fade)',
+            pressed ? 'opacity-100' : 'opacity-0 group-active/tab:opacity-100 group-active/tab:duration-0',
+          )}
+        />
+      )}
       <span
         className={cn(
           'relative min-w-0 flex-1 truncate text-center text-sm leading-5',
@@ -98,7 +104,13 @@ function TabFace({
       >
         {label}
       </span>
-      {divider && <span aria-hidden className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider" />}
+      {divider && (
+        <span
+          aria-hidden
+          data-tab-divider
+          className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider group-active/tab:opacity-0"
+        />
+      )}
     </span>
   )
 }
@@ -106,6 +118,7 @@ function TabFace({
 export function Tabs({ items, activeKey, onChange, className, forcePressedKey }: TabsProps) {
   const groupId = useId()
   const activeIndex = items.findIndex((i) => i.key === activeKey)
+  const pressedIndex = items.findIndex((i) => i.key === forcePressedKey)
   return (
     <LayoutGroup id={groupId}>
       <AntTabs
@@ -118,7 +131,13 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey }:
             <TabFace
               label={item.label}
               active={i === activeIndex}
-              divider={i !== activeIndex && i !== 0 && i !== activeIndex + 1}
+              divider={
+                i !== 0 &&
+                i !== activeIndex &&
+                i !== activeIndex + 1 &&
+                i !== pressedIndex &&
+                (pressedIndex === -1 || i !== pressedIndex + 1)
+              }
               pressed={item.key === forcePressedKey}
             />
           ),
@@ -130,6 +149,8 @@ export function Tabs({ items, activeKey, onChange, className, forcePressedKey }:
           '[&_.ant-tabs-nav-list]:w-full',
           '[&_.ant-tabs-tab]:min-w-0 [&_.ant-tabs-tab]:flex-1 [&_.ant-tabs-tab]:p-0',
           '[&_.ant-tabs-tab-btn]:w-full [&_.ant-tabs-tab-btn]:min-w-0',
+          // hide the next tab's divider while this tab is pressed
+          '[&_.ant-tabs-tab:has([data-tab-face]:active)+.ant-tabs-tab_[data-tab-divider]]:opacity-0',
           '[&_.ant-tabs-ink-bar]:hidden [&_.ant-tabs-nav-operations]:hidden [&_.ant-tabs-content-holder]:hidden',
           className,
         )}

@@ -18,7 +18,7 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | AntD + Tailwind | CSS cascade layers: `@layer theme, base, antd, components, utilities`, with AntD's `StyleProvider layer` so Tailwind's reset doesn't break AntD and utilities can override AntD |
 | Routing | None. One screen; `?device=` and `?order=` read and written with `URLSearchParams` + `history.replaceState` |
 | Class helpers | `clsx` + `tailwind-merge` (`cn()`), and `tailwind-variants` for components with variants (Button, tiles) |
-| Motion | `motion` (`motion/react`): the active tab sliding between tabs (`layoutId`, 300ms, no bounce) and the device-frame resize. All pressed states are CSS `:active` (no scale anywhere). `MotionConfig reducedMotion="user"` respects the OS setting. |
+| Motion | `motion` (`motion/react`): selection indicators that slide (active tab, view-toggle and device-switcher thumbs, via `layoutId`) and the device-frame resize. **All timing lives in `src/lib/motion.ts`** (`selectionSlide`, `frameResize`); components never define their own. Pressed states are CSS `:active` (no scale anywhere) with one shared fade token, `--motion-press-fade`. `MotionConfig reducedMotion="user"` respects the OS setting. |
 | Icons | `iconoir-react` (regular) and `iconoir-react/solid` (filled) |
 | Font | Inter via `@fontsource-variable/inter` (self-hosted, bundled) |
 | State | One React context + reducer |
@@ -78,7 +78,7 @@ src/
 │  ├─ ui/                   AntD wrappers. The ONLY place that imports from "antd".
 │  │  ├─ Button.tsx         Primary (Charge), Secondary (Hold/Fire/Print); :active press, no scale
 │  │  ├─ IconButton.tsx     48×48, 20px icon, flat pressed state
-│  │  ├─ Segmented.tsx      view toggle + device switcher
+│  │  ├─ Segmented.tsx      view toggle + device switcher; sliding Motion thumb
 │  │  ├─ Tabs.tsx           category tabs: sliding active surface + strip (Motion), dividers
 │  │  ├─ Breadcrumb.tsx     48px crumbs, nav-arrow-right separator
 │  │  ├─ Tag.tsx            table pill "T1"
@@ -117,6 +117,7 @@ src/
 ├─ dev/Gallery.tsx         ?view=gallery: every ui/ component in every state
 ├─ lib/
 │  ├─ cn.ts                 cn() + tv() with custom shadow names; overlayPressed
+│  ├─ motion.ts             Motion presets: selectionSlide, frameResize (the only place timing is set)
 │  ├─ money.ts              cents, formatting (incl. "−$3.00"), rounding
 │  └─ devices.ts            air11 / pro11 / android10 / pro13
 └─ theme/
