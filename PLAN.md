@@ -76,7 +76,7 @@ src/
 │
 ├─ components/
 │  ├─ ui/                   AntD wrappers. The ONLY place that imports from "antd".
-│  │  ├─ Button.tsx         Primary (Charge), Secondary (Hold/Fire/Print); Motion press
+│  │  ├─ Button.tsx         Primary (Charge), Secondary (Hold/Fire/Print); :active press, no scale
 │  │  ├─ IconButton.tsx     48×48, 20px icon, flat pressed state
 │  │  ├─ Segmented.tsx      view toggle + device switcher
 │  │  ├─ Tabs.tsx           category tabs: brand strip, dividers, joined surface
