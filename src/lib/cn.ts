@@ -30,3 +30,10 @@ export const tv = createTV({ twMerge })
  * background colour and below the content, with no extra element.
  */
 export const overlayPressed = 'bg-[image:linear-gradient(var(--bg-overlay-pressed),var(--bg-overlay-pressed))]'
+
+/**
+ * Same overlay, only while :active. Written out in full (not built from the
+ * string above) because Tailwind only generates classes it finds literally.
+ */
+export const overlayPressedActive =
+  'active:bg-[image:linear-gradient(var(--bg-overlay-pressed),var(--bg-overlay-pressed))]'

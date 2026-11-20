@@ -18,7 +18,7 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | AntD + Tailwind | CSS cascade layers: `@layer theme, base, antd, components, utilities`, with AntD's `StyleProvider layer` so Tailwind's reset doesn't break AntD and utilities can override AntD |
 | Routing | None. One screen; `?device=` and `?order=` read and written with `URLSearchParams` + `history.replaceState` |
 | Class helpers | `clsx` + `tailwind-merge` (`cn()`), and `tailwind-variants` for components with variants (Button, tiles) |
-| Motion | `motion` (`motion/react`) for press and frame-resize animation |
+| Motion | `motion` (`motion/react`): tile press scale (`lib/usePress.ts`) and the device-frame resize. Buttons and flat controls use CSS `:active` only. |
 | Icons | `iconoir-react` (regular) and `iconoir-react/solid` (filled) |
 | Font | Inter via `@fontsource-variable/inter` (self-hosted, bundled) |
 | State | One React context + reducer |
@@ -33,6 +33,7 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | `bg-overlay-pressed` (no token exists) | Add `--bg-overlay-pressed` (black 14%) + `--color-overlay-pressed` | Used by every raised pressed state |
 | Page background uses `--neutral-950` (a primitive) | Add semantic `--bg-presentation` | Keeps the "semantic tokens only" rule |
 | Empty order can't be reached | `?order=empty` URL flag | Lets reviewers see the Disabled actions |
+| Buttons scale to 0.97 when pressed (§6) | Buttons don't scale: pressed = `shadow-pressed` + overlay only, via CSS `:active` | Design decision. Tiles still scale (Motion). |
 
 ### Findings from setup (phase 0)
 
@@ -116,7 +117,7 @@ src/
 ├─ dev/Gallery.tsx         ?view=gallery: every ui/ component in every state
 ├─ lib/
 │  ├─ cn.ts                 cn() + tv() with custom shadow names; overlayPressed
-│  ├─ usePress.ts           raised press: Motion tap → scale 0.97 + pressed flag
+│  ├─ usePress.ts           tile press: Motion tap → scale 0.97 + pressed flag
 │  ├─ money.ts              cents, formatting (incl. "−$3.00"), rounding
 │  └─ devices.ts            air11 / pro11 / android10 / pro13
 └─ theme/
@@ -201,7 +202,7 @@ Global AntD config: `wave={{ disabled: true }}` (Motion handles press feedback).
 - **Done when:** the Kebabs tab matches Figma tile for tile.
 
 ### Phase 5 · Interaction and press states
-- Raised press (scale 0.97, `shadow-pressed`, overlay, ~120ms spring) for tiles and buttons; flat press (`bg-raised`) for tabs, icon buttons, toggle segments, order lines; cashier pill pressed = `bg-surface`.
+- Tile press (scale 0.97, `shadow-pressed`, overlay, ~120ms spring); buttons already done in phase 2 (no scale); flat press (`bg-raised`) for tabs, icon buttons, toggle segments, order lines; cashier pill pressed = `bg-surface`.
 - Wire tap to add, folders, Back, breadcrumb, tabs. Sold-out: no press, no tap.
 - Live totals and Charge label; Disabled actions on empty order.
 - **Done when:** every item in BRIEF §1 "In scope" works on mouse and touch.
