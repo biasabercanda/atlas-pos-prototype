@@ -59,6 +59,17 @@ export const pressFadeFilter =
 export const pressSink =
   'transition-transform duration-(--motion-press-out) ease-(--motion-ease) group-active/press:translate-y-px group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
 
+/**
+ * The same 1px sink for buttons, whose content is AntD's icon and label
+ * <span>s (direct children of the <button>), driven by the button's own
+ * :active. Written out in full for Tailwind.
+ */
+export const buttonSink =
+  '[&>span]:transition-transform [&>span]:duration-(--motion-press-out) [&>span]:ease-(--motion-ease) active:[&>span]:translate-y-px active:[&>span]:duration-(--motion-press-in) motion-reduce:[&>span]:transition-none'
+
+/** Button content held in its sunk position (gallery "Pressed" columns). */
+export const buttonSinkForced = '[&>span]:translate-y-px'
+
 /** The pressed pill held in its pressed look (gallery "Pressed" columns). */
 export const pressPillForced = 'opacity-100 scale-100'
 

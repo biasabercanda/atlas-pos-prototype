@@ -1,12 +1,13 @@
 import { Button as AntButton, type ButtonProps as AntButtonProps } from 'antd'
 import type { ReactNode } from 'react'
-import { cn, overlayPressed, overlayPressedActive, tv } from '../../lib/cn'
+import { buttonSink, buttonSinkForced, cn, overlayPressed, overlayPressedActive, tv } from '../../lib/cn'
 
 /*
  * Figma: Components → Order panel → Button (17:250)
  *   Primary   (Charge):           bg-brand, 16 Extra Bold, shadow-button
  *   Secondary (Hold/Fire/Print):  bg-surface + 1px divider, 20px icon + 14 Bold
- * States: Default · Pressed (shadow-pressed + overlay, no scale) · Disabled
+ * States: Default · Pressed (shadow-pressed + overlay, content sinks 1px like
+ *         the tiles, no scale) · Disabled
  *   Primary disabled: bg-raised, text-disabled, no shadow
  *   Secondary disabled: text-disabled, icon at 40%, no shadow
  * Pressed uses CSS :active (pointer, touch and Space/Enter), so no JS state.
@@ -27,8 +28,8 @@ const button = tv({
     disabled: { true: 'shadow-none cursor-not-allowed', false: '' },
   },
   compoundVariants: [
-    { disabled: false, pressed: false, class: ['shadow-button', 'active:shadow-pressed', overlayPressedActive] },
-    { disabled: false, pressed: true, class: pressedClasses },
+    { disabled: false, pressed: false, class: ['shadow-button', 'active:shadow-pressed', overlayPressedActive, buttonSink] },
+    { disabled: false, pressed: true, class: [...pressedClasses, buttonSinkForced] },
     { variant: 'primary', disabled: true, class: 'bg-raised text-disabled' },
     { variant: 'secondary', disabled: true, class: 'bg-surface border-divider text-disabled' },
   ],
