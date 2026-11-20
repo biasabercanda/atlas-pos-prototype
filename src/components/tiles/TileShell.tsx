@@ -10,9 +10,10 @@ import type { CategoryColor } from '../../data/types'
  *   tint  --category-{color}-overlay with mix-blend-mode: overlay (product only)
  *   press bg-overlay-pressed, only while pressed
  *   strip 7px --category-{color}-mark on the left (product only)
- *   edge  the inset part of shadow-tile (or shadow-pressed), drawn on top so
- *         the tint and strip don't cover it, as in Figma
- * The shell itself carries shadow-tile for the outer drop shadow.
+ *   edge  shadow-tile (or shadow-pressed), drawn on top so the tint and strip
+ *         don't cover its insets, as in Figma; its outer part is clipped
+ * The shell itself carries only the outer drop shadow (drop-shadow-tile), so
+ * each inset is painted exactly once.
  * Content (name, icons) sits above all layers; badges sit outside the shell,
  * so the wrapper doesn't clip (the shell does).
  *
@@ -71,7 +72,10 @@ export function TileShell({
         aria-hidden
         className={cn(
           'absolute inset-0 isolate overflow-hidden rounded-lg bg-tile',
-          !disabled && 'shadow-tile group-active/press:shadow-none',
+          // Outer drop shadow only. A box-shadow here would also paint shadow-tile's
+          // insets, which show through the transparent tint and double up with the
+          // edge layer below.
+          !disabled && 'drop-shadow-tile group-active/press:drop-shadow-none',
         )}
       >
         {tint && <span className="absolute inset-0 bg-(--tint) mix-blend-overlay" />}

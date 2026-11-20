@@ -78,7 +78,7 @@ Measured at 1194 × 834 against Figma 257:21144: surface 850 × 754, header 818 
 | Product tile radius: component sheet 10, final screen and brief 12 | 12 |
 | Sold-out name: component sheet `text-faint`, final screen and brief `text-disabled` | `text-disabled` |
 | Badges on the final screen: 24 tall, **2px `bg-surface` border** (reads as cut out of the surface), count 26 wide, best seller fixed 27 wide; not in the brief | Followed the final screen. The ★ glyph is wider than the padding allows, so best seller is a fixed 27 |
-| Box-shadow insets are covered by the tint and strip layers | `TileShell` draws the inset part on a top "edge" layer, as Figma does; the shell keeps the outer shadow |
+| Box-shadow insets are covered by the tint and strip layers | `TileShell` draws `shadow-tile` once, on a top "edge" layer, as Figma does; the shell carries only the outer `drop-shadow-tile`. (A first version also put `shadow-tile` on the shell; its insets showed through the transparent tint and doubled the bottom edge to ~38%. Fixed and checked by pixel sampling against the Figma render: bottom edge (30, 32, 44) vs Figma (30, 32, 40).) |
 | Folder: `clip-path` would clip the shadows | One SVG drawn at the cell's fractional size (`useElementSize`, transform-proof), with Figma's exported filters: 1.5px inner bottom edge, inner pressed shadow that follows the cut, exact top-light curves, flap with a rounded inner corner |
 | New tokens for the SVG folder | `--effect-inner-edge`, `--effect-inner-pressed`, `--drop-shadow-tile`, `--drop-shadow-flap` (same values as the existing shadow styles) |
 
