@@ -2,6 +2,8 @@
 
 Clickable code prototype of the ordering screen (Figma `3ewVFDwH7XM3HN3qY0NkX5`, node `257:21144`), built as a case study for an application to Atlas Kitchen. Atlas Kitchen builds its frontend applications in **React with Ant Design + Tailwind CSS**, so the prototype uses the same stack: AntD for standard controls, custom components for the parts no library covers, Tailwind for all styling. Like their frontends, it builds to static files (a single-page app) and is served from Cloudflare. There is no backend: all data comes from `menu.json`.
 
+**Live prototype:** https://atlas-pos-prototype.sofyanhidayat48.workers.dev (deploy: `npm run deploy`).
+
 Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRIEF_1.md` and `tokens.css` are older versions; ignore them.
 
 ---
