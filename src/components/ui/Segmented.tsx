@@ -1,7 +1,7 @@
 import { Segmented as AntSegmented } from 'antd'
 import { LayoutGroup, motion } from 'motion/react'
 import { useId, type ReactNode } from 'react'
-import { cn, tv } from '../../lib/cn'
+import { cn, pressPill, tv } from '../../lib/cn'
 import { selectionSlide } from '../../lib/motion'
 
 /*
@@ -28,14 +28,14 @@ const segmented = tv({
       '[&_.ant-segmented-item]:text-secondary [&_.ant-segmented-item-selected]:text-on-accent',
       '[&_.ant-segmented-item-selected]:bg-transparent',
       '[&_.ant-segmented-item-label]:p-0 [&_.ant-segmented-item-label]:min-h-0',
+      // AntD clips the label (ellipsis); unclip it so the thumb is visible as
+      // it travels across the other options, not just inside the new one.
+      '[&_.ant-segmented-item-label]:overflow-visible',
     ],
-    face: 'relative flex items-center justify-center',
+    face: 'group/press relative flex items-center justify-center',
     thumb: 'absolute inset-0 rounded-md bg-brand',
-    press: [
-      'absolute inset-0 rounded-md opacity-0',
-      'transition-opacity duration-(--motion-press-fade)',
-      'group-active/seg:opacity-100 group-active/seg:duration-0',
-    ],
+    press: ['absolute inset-0 rounded-md', pressPill],
+    content: 'relative z-10 flex items-center justify-center',
   },
   variants: {
     size: {
@@ -88,13 +88,13 @@ export function Segmented<V extends string>({
             value: o.value,
             title: o.title,
             label: (
-              <span className={cn('group/seg', s.face())}>
+              <span className={s.face()}>
                 {selected ? (
                   <motion.span layoutId="segmented-thumb" transition={selectionSlide} aria-hidden className={s.thumb()} />
                 ) : (
                   <span aria-hidden className={s.press()} />
                 )}
-                <span className="relative flex items-center justify-center">{o.content}</span>
+                <span className={s.content()}>{o.content}</span>
               </span>
             ),
           }

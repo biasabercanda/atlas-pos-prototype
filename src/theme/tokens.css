@@ -176,8 +176,23 @@
   --category-teal-overlay: var(--teal-400-a10);
   --category-violet-overlay: var(--violet-400-a10);
 
-  /* ── Motion (added in code) · JS presets live in src/lib/motion.ts ── */
-  --motion-press-fade: 120ms;             /* flat pressed background fading out on release */
+  /* ── Motion (added in code) ──
+   * Same two layers as colour: primitives (raw durations / curves) → semantic
+   * tokens (what they're for). Components use semantic tokens only.
+   * Motion (JS) can't read CSS variables, so src/lib/motion.ts mirrors these
+   * values; src/lib/motion.test.ts fails if the two drift apart.
+   */
+  --duration-100: 100ms;
+  --duration-150: 150ms;
+  --duration-250: 250ms;
+  --duration-300: 300ms;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);  /* fast start, soft landing */
+
+  --motion-press-in: var(--duration-100);    /* pressed pill appearing */
+  --motion-press-out: var(--duration-150);   /* pressed pill leaving on release */
+  --motion-select: var(--duration-300);      /* selection indicator sliding to a new option */
+  --motion-frame: var(--duration-250);       /* device frame resizing (presentation shell) */
+  --motion-ease: var(--ease-out-quint);      /* default easing for all of the above */
 
   /* ── Spacing v2 (8px scale) ── */
   --spacing-4: 4px;

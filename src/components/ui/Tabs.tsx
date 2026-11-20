@@ -1,7 +1,7 @@
 import { Tabs as AntTabs } from 'antd'
 import { LayoutGroup, motion } from 'motion/react'
 import { useId } from 'react'
-import { cn } from '../../lib/cn'
+import { cn, pressPill, pressPillForced } from '../../lib/cn'
 import { selectionSlide } from '../../lib/motion'
 
 /*
@@ -12,8 +12,8 @@ import { selectionSlide } from '../../lib/motion'
  *             radius 0 0 12 12, 12px concave curves at both top corners,
  *             5px bg-brand strip inset 16, flush with the bottom.
  *   Pressed:  bg-raised, radius 10, 56 tall (Figma) centred in the 64 tab;
- *             the dividers on both sides hide while pressed. Appears on the
- *             first frame, fades out on release (--motion-press-fade).
+ *             the dividers on both sides hide while pressed. The pill grows
+ *             in on press and fades out on release (pressPill, motion tokens).
  * Tabs fill the width equally; long labels truncate.
  *
  * The active look (surface + curves + strip) is one shared Motion element
@@ -84,21 +84,17 @@ function TabFace({
   pressed: boolean
 }) {
   return (
-    <span data-tab-face className="group/tab relative flex h-16 w-full min-w-0 items-center px-4">
+    <span data-tab-face className="group/press relative flex h-16 w-full min-w-0 items-center px-4">
       {active && <ActiveIndicator />}
       {!active && (
         <span
           aria-hidden
-          className={cn(
-            'absolute inset-x-0 inset-y-1 rounded-md bg-raised',
-            'transition-opacity duration-(--motion-press-fade)',
-            pressed ? 'opacity-100' : 'opacity-0 group-active/tab:opacity-100 group-active/tab:duration-0',
-          )}
+          className={cn('absolute inset-x-0 inset-y-1 rounded-md bg-raised', pressed ? pressPillForced : pressPill)}
         />
       )}
       <span
         className={cn(
-          'relative min-w-0 flex-1 truncate text-center text-sm leading-5',
+          'relative z-10 min-w-0 flex-1 truncate text-center text-sm leading-5',
           active ? 'font-extrabold text-primary' : 'font-semibold text-muted',
         )}
       >
@@ -108,7 +104,7 @@ function TabFace({
         <span
           aria-hidden
           data-tab-divider
-          className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider group-active/tab:opacity-0"
+          className="absolute top-1/2 -left-[3px] h-6 w-px -translate-y-1/2 bg-divider group-active/press:opacity-0"
         />
       )}
     </span>
