@@ -269,6 +269,10 @@
   /* Count + best-seller badges — "Shadow/Badge" */
   --shadow-badge: 0 2px 6px rgb(0 0 0 / 0.40);
 
+  /* added in code: presentation shell device frame (desktop browsers only) */
+  --radius-device: 24px;
+  --shadow-device: 0 32px 80px rgb(0 0 0 / 0.55), 0 8px 24px rgb(0 0 0 / 0.35);
+
   /* added in code: filter drop-shadows for shapes box-shadow can't follow (folder tile) */
   --drop-shadow-tile: 0 1.5px 3.5px rgb(0 0 0 / 0.24); /* outer part of Shadow/Tile */
   --drop-shadow-flap: 0 0 4px rgb(0 0 0 / 0.35);       /* folder fold flap */

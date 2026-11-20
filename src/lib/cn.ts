@@ -10,7 +10,8 @@ import { createTV } from 'tailwind-variants'
 const twMergeConfig = {
   extend: {
     theme: {
-      shadow: ['tile', 'button', 'soft', 'pressed', 'badge'],
+      shadow: ['tile', 'button', 'soft', 'pressed', 'badge', 'device'],
+      radius: ['sm', 'md', 'lg', 'xl', 'device'],
       'drop-shadow': ['tile', 'flap'],
     },
   },

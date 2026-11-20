@@ -84,6 +84,16 @@ Measured at 1194 × 834 against Figma 257:21144: surface 850 × 754, header 818 
 
 Measured: badges sit 8px outside the tile corner with a 4px gap; folder SVG 150.8 × 150.5; at 1180×820 / 1194×834 / 1280×800 / 1366×1024 tiles are 148×147 / 150.8×150.5 / 168×142 / 174×198, names 14 / 14 / 16 / 16, panel 344 / 344 / 344 / 400. All match BRIEF §3.
 
+### Findings from the presentation shell (phase 7)
+
+Measured at a 1440 × 900 window: framed mode, frame laid out at 1194 × 834 and scaled 0.916 (readout "92%"), centred, top at 104, 32 below, no page scroll. Switching devices keeps the order lines, tab and open folder; `?device=` updates (default `pro11` removes it); a `?device=android10&order=empty` link opens that device with an empty order. Final sizes per device match BRIEF §3 (tiles 148×147 / 150.8×150.5 / 168×142 / 174×198, panel 344/344/344/400). Too-small message shows below 0.5 scale.
+
+| Finding | Resolution |
+|---|---|
+| Motion's layout animation (sliding active tab) measures on screen; inside the scaled frame it overshot (e.g. 789 vs 779 local px) | `DeviceFrame` is a Motion layout node (`layout="position"`) so projection removes the frame's scale. **Not yet re-measured**: the browser pane was hidden (no animation frames). Check by switching tabs in a scaled frame |
+| New tokens | `--radius-device` (24), `--shadow-device` |
+| Device mode (coarse pointer, ≥ 1180 × 800) can't be emulated here | Logic in place; check on a real iPad |
+
 Component gallery: `?view=gallery` (`src/dev/Gallery.tsx`) shows every wrapper in every state.
 
 ---
@@ -126,7 +136,7 @@ src/
 │  │  └─ OrderPanel/        OrderPanel.tsx, OrderHeader, OrderLine, Totals, OrderActions
 │  │
 │  └─ shell/                Presentation only; knows nothing about the order
-│     ├─ PresentationShell.tsx  device vs framed mode, scale, too-small message
+│     ├─ PresentationShell.tsx  device vs framed mode, scale, ?device=, too-small message
 │     ├─ DeviceFrame.tsx        sized frame, transform: scale, Motion resize
 │     └─ DeviceSwitcher.tsx     uses ui/Segmented, syncs ?device=
 │
@@ -146,6 +156,7 @@ src/
 │  ├─ motion.ts             motion tokens for JS (mirrors tokens.css) + presets: selectionSlide, frameResize
 │  ├─ motion.test.ts        fails if motion.ts and tokens.css drift apart
 │  ├─ useElementSize.ts     fractional element size (ResizeObserver), used by FolderTile
+│  ├─ useViewport.ts        window size + coarse pointer (shell only)
 │  ├─ money.ts              cents, formatting (incl. "−$3.00"), rounding
 │  └─ devices.ts            air11 / pro11 / android10 / pro13
 └─ theme/
