@@ -11,7 +11,8 @@ import { selectionSlide } from '../../lib/motion'
  *   Active:   14 Extra Bold text-primary, bg-surface (joins the surface above),
  *             radius 0 0 12 12, 12px concave curves at both top corners,
  *             5px bg-brand strip inset 16, flush with the bottom.
- *   Pressed:  bg-raised, radius 10, 56 tall (Figma) centred in the 64 tab;
+ *   Pressed:  bg-surface (same as the active tab; Figma uses bg-raised), radius 10,
+ *             56 tall (Figma) centred in the 64 tab;
  *             the dividers on both sides hide while pressed. The pill grows
  *             in on press and fades out on release (pressPill, motion tokens).
  * Tabs fill the width equally; long labels truncate.
@@ -96,13 +97,14 @@ function TabFace({
 }) {
   return (
     <span data-tab-face className="group/press relative flex h-16 w-full min-w-0 items-center px-4">
+      {/* Always mounted, under the active surface: when a tapped tab becomes
+          active, its pill fades out behind the arriving surface instead of
+          vanishing on the spot (which read as a flash on quick taps). */}
+      <span
+        aria-hidden
+        className={cn('absolute inset-x-0 inset-y-1 rounded-md bg-surface', pressed ? pressPillForced : pressPill)}
+      />
       {active && <ActiveIndicator flushRight={flushRight} />}
-      {!active && (
-        <span
-          aria-hidden
-          className={cn('absolute inset-x-0 inset-y-1 rounded-md bg-raised', pressed ? pressPillForced : pressPill)}
-        />
-      )}
       <span
         className={cn(
           'relative z-10 min-w-0 flex-1 truncate text-center text-sm leading-5',

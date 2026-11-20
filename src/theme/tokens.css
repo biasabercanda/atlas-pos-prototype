@@ -194,7 +194,7 @@
   --ease-in-quint: cubic-bezier(0.64, 0, 0.78, 0);   /* slow start, finishes fast */
 
   --motion-press-in: var(--duration-100);    /* pressed pill appearing */
-  --motion-press-out: var(--duration-150);   /* pressed pill leaving on release */
+  --motion-press-out: var(--duration-250);   /* pressed state easing out on release: long enough that a quick tap doesn't flash */
   --motion-select: var(--duration-300);      /* selection indicator sliding to a new option */
   --motion-feedback: var(--duration-150);    /* confirmation of a tap: badge pop, new order line, new crumb */
   --motion-frame: var(--duration-250);       /* device frame resizing (presentation shell) */

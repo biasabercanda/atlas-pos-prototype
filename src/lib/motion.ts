@@ -23,7 +23,7 @@ export const easeInQuint = [0.64, 0, 0.78, 0] as const
 /** Semantic tokens, in ms (same names as tokens.css, without "--motion-"). */
 export const motionTokens = {
   pressIn: duration[100],
-  pressOut: duration[150],
+  pressOut: duration[250],
   select: duration[300],
   feedback: duration[150],
   frame: duration[250],
