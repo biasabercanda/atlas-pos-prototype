@@ -132,6 +132,9 @@
   --effect-top-light: var(--neutral-0);   /* used at 12% as inner highlight */
   --bg-overlay-pressed: rgb(0 0 0 / 0.14); /* added in code: pressed layer on raised tiles + buttons */
   --bg-presentation: var(--neutral-950);  /* added in code: page behind the framed device */
+  /* added in code: shadow colours for the SVG-drawn folder tile (same values as Shadow/Tile and Shadow/Pressed) */
+  --effect-inner-edge: rgb(0 0 0 / 0.21);     /* 1.5px dark inner bottom edge */
+  --effect-inner-pressed: rgb(0 0 0 / 0.45);  /* pressed inner shadow */
 
   /* ── Semantic · text ── */
   --text-primary: var(--neutral-100);
@@ -262,6 +265,10 @@
   --shadow-pressed: inset 0 2px 6px rgb(0 0 0 / 0.45);
   /* Count + best-seller badges — "Shadow/Badge" */
   --shadow-badge: 0 2px 6px rgb(0 0 0 / 0.40);
+
+  /* added in code: filter drop-shadows for shapes box-shadow can't follow (folder tile) */
+  --drop-shadow-tile: 0 1.5px 3.5px rgb(0 0 0 / 0.24); /* outer part of Shadow/Tile */
+  --drop-shadow-flap: 0 0 4px rgb(0 0 0 / 0.35);       /* folder fold flap */
 
   --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
 }

@@ -71,6 +71,19 @@ Measured at 1194 × 834 against Figma 257:21144: surface 850 × 754, header 818 
 | Iconoir defaults to stroke 1.5 / 24px | `IconoirProvider` in `App.tsx` sets 20px, stroke 2 for every icon |
 | Order line qty shows "2x" in the component, "2×" on the final screen | "×" |
 
+### Findings from the tiles (phase 4)
+
+| Finding | Resolution |
+|---|---|
+| Product tile radius: component sheet 10, final screen and brief 12 | 12 |
+| Sold-out name: component sheet `text-faint`, final screen and brief `text-disabled` | `text-disabled` |
+| Badges on the final screen: 24 tall, **2px `bg-surface` border** (reads as cut out of the surface), count 26 wide, best seller fixed 27 wide; not in the brief | Followed the final screen. The ★ glyph is wider than the padding allows, so best seller is a fixed 27 |
+| Box-shadow insets are covered by the tint and strip layers | `TileShell` draws the inset part on a top "edge" layer, as Figma does; the shell keeps the outer shadow |
+| Folder: `clip-path` would clip the shadows | One SVG drawn at the cell's fractional size (`useElementSize`, transform-proof), with Figma's exported filters: 1.5px inner bottom edge, inner pressed shadow that follows the cut, exact top-light curves, flap with a rounded inner corner |
+| New tokens for the SVG folder | `--effect-inner-edge`, `--effect-inner-pressed`, `--drop-shadow-tile`, `--drop-shadow-flap` (same values as the existing shadow styles) |
+
+Measured: badges sit 8px outside the tile corner with a 4px gap; folder SVG 150.8 × 150.5; at 1180×820 / 1194×834 / 1280×800 / 1366×1024 tiles are 148×147 / 150.8×150.5 / 168×142 / 174×198, names 14 / 14 / 16 / 16, panel 344 / 344 / 344 / 400. All match BRIEF §3.
+
 Component gallery: `?view=gallery` (`src/dev/Gallery.tsx`) shows every wrapper in every state.
 
 ---
@@ -132,6 +145,7 @@ src/
 │  ├─ cn.ts                 cn() + tv() with custom shadow names; overlayPressed
 │  ├─ motion.ts             motion tokens for JS (mirrors tokens.css) + presets: selectionSlide, frameResize
 │  ├─ motion.test.ts        fails if motion.ts and tokens.css drift apart
+│  ├─ useElementSize.ts     fractional element size (ResizeObserver), used by FolderTile
 │  ├─ money.ts              cents, formatting (incl. "−$3.00"), rounding
 │  └─ devices.ts            air11 / pro11 / android10 / pro13
 └─ theme/

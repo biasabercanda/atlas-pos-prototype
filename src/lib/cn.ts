@@ -11,6 +11,7 @@ const twMergeConfig = {
   extend: {
     theme: {
       shadow: ['tile', 'button', 'soft', 'pressed', 'badge'],
+      'drop-shadow': ['tile', 'flap'],
     },
   },
 }
