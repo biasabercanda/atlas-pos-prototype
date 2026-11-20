@@ -41,6 +41,16 @@ export const overlayPressed = 'bg-[image:linear-gradient(var(--bg-overlay-presse
 export const pressPill =
   'opacity-0 scale-90 transition-[opacity,scale] duration-(--motion-press-out) ease-(--motion-ease) motion-reduce:transition-none group-active/press:opacity-100 group-active/press:scale-100 group-active/press:duration-(--motion-press-in)'
 
+/**
+ * Raised press easing (tiles, folders): add to a layer whose opacity or filter
+ * changes under `group-active/press`. Eases in over --motion-press-in, out over
+ * --motion-press-out. Written out in full for Tailwind.
+ */
+export const pressFadeOpacity =
+  'transition-opacity duration-(--motion-press-out) ease-(--motion-ease) group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+export const pressFadeFilter =
+  'transition-[filter] duration-(--motion-press-out) ease-(--motion-ease) group-active/press:duration-(--motion-press-in) motion-reduce:transition-none'
+
 /** The pressed pill held in its pressed look (gallery "Pressed" columns). */
 export const pressPillForced = 'opacity-100 scale-100'
 

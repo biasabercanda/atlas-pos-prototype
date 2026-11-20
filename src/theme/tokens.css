@@ -195,6 +195,7 @@
   --motion-press-in: var(--duration-100);    /* pressed pill appearing */
   --motion-press-out: var(--duration-150);   /* pressed pill leaving on release */
   --motion-select: var(--duration-300);      /* selection indicator sliding to a new option */
+  --motion-feedback: var(--duration-150);    /* confirmation of a tap: badge pop, new order line, new crumb */
   --motion-frame: var(--duration-250);       /* device frame resizing (presentation shell) */
   --motion-ease: var(--ease-out-quint);      /* default easing for all of the above */
 

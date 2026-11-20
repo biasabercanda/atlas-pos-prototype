@@ -18,7 +18,7 @@ Source files (in `~/Downloads`): `BRIEF.md` and `tokens_1.css` are current. `BRI
 | AntD + Tailwind | CSS cascade layers: `@layer theme, base, antd, components, utilities`, with AntD's `StyleProvider layer` so Tailwind's reset doesn't break AntD and utilities can override AntD |
 | Routing | None. One screen; `?device=` and `?order=` read and written with `URLSearchParams` + `history.replaceState` |
 | Class helpers | `clsx` + `tailwind-merge` (`cn()`), and `tailwind-variants` for components with variants (Button, tiles) |
-| Motion | `motion` (`motion/react`) for selection indicators that slide (active tab, view-toggle and device-switcher thumbs, via `layoutId`) and the device-frame resize. Pressed states are CSS (`:active`), no scale anywhere; flat controls get a pressed pill that grows in (`pressPill` in `lib/cn.ts`). **Motion tokens** live in `tokens.css` (primitives `--duration-*`, `--ease-out-quint` → semantic `--motion-press-in/out`, `--motion-select`, `--motion-frame`, `--motion-ease`); `lib/motion.ts` mirrors them for JS and `lib/motion.test.ts` fails if they drift. `MotionConfig reducedMotion="user"` + `motion-reduce:` respect the OS setting. |
+| Motion | `motion` (`motion/react`) and CSS transitions, all timed by **motion tokens** in `tokens.css` (primitives `--duration-*`, `--ease-out-quint` → semantic `--motion-press-in/out`, `--motion-select`, `--motion-feedback`, `--motion-frame`, `--motion-ease`); `lib/motion.ts` mirrors them for JS (`selectionSlide`, `tapFeedback`, `frameResize`) and `lib/motion.test.ts` fails if they drift. Where: selection indicators slide (active tab, toggle and switcher thumbs, `layoutId`); tiles and folders ease their pressed shadow/overlay (CSS, no scale); flat controls get a pressed pill; count badge pops in and its number ticks; the ★ slides left as the count appears or widens (animated `right` from a layout measurement, so it's correct inside the scaled device frame); new order lines slide in; a new breadcrumb crumb slides in and the parent eases to muted (going back is instant); device-frame resize. Folder contents don't cross-fade (cashiers tap fast). `MotionConfig reducedMotion="user"` + `motion-reduce:` respect the OS setting. |
 | Icons | `iconoir-react` (regular) and `iconoir-react/solid` (filled) |
 | Font | Inter via `@fontsource-variable/inter` (self-hosted, bundled) |
 | State | One React context + reducer |
@@ -230,6 +230,7 @@ Global AntD config: `wave={{ disabled: true }}` (pressed states are our own CSS 
 - **Done when:** the Kebabs tab matches Figma tile for tile.
 
 ### Phase 5 · Interaction and press states
+- Done early (phases 2–4 + motion pass): taps wired, press states and easing, badge/line/crumb feedback. Left: press-state pass on a real tablet, keyboard/focus pass.
 - Tile press via CSS `:active` (`shadow-pressed` + overlay, no scale; folder: inset shadow + overlay following the cut corner); buttons already done in phase 2; flat press (`bg-raised`) for tabs, icon buttons, toggle segments, order lines; cashier pill pressed = `bg-surface`.
 - Wire tap to add, folders, Back, breadcrumb, tabs. Sold-out: no press, no tap.
 - Live totals and Charge label; Disabled actions on empty order.

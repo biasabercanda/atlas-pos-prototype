@@ -32,6 +32,7 @@ describe('motion tokens', () => {
     expect(resolve('motion-press-in')).toBe(`${motionTokens.pressIn}ms`)
     expect(resolve('motion-press-out')).toBe(`${motionTokens.pressOut}ms`)
     expect(resolve('motion-select')).toBe(`${motionTokens.select}ms`)
+    expect(resolve('motion-feedback')).toBe(`${motionTokens.feedback}ms`)
     expect(resolve('motion-frame')).toBe(`${motionTokens.frame}ms`)
     expect(resolve('motion-ease')).toBe(`cubic-bezier(${motionTokens.ease.join(', ')})`)
   })

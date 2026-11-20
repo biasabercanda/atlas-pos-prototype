@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import { cn } from '../../lib/cn'
+import { cn, pressFadeFilter, pressFadeOpacity } from '../../lib/cn'
 import type { CategoryColor } from '../../data/types'
 
 /*
@@ -18,7 +18,8 @@ import type { CategoryColor } from '../../data/types'
  * so the wrapper doesn't clip (the shell does).
  *
  * Pressed: CSS :active on the button (no scale): drop shadow off, edge becomes
- * shadow-pressed, overlay on. Disabled (sold out): no shadows, no press, no tap.
+ * shadow-pressed, overlay on, easing in over --motion-press-in and out over
+ * --motion-press-out. Disabled (sold out): no shadows, no press, no tap.
  *
  * Training mode: `highlight` draws a brand outline; `disabled` blocks taps.
  */
@@ -75,14 +76,33 @@ export function TileShell({
           // Outer drop shadow only. A box-shadow here would also paint shadow-tile's
           // insets, which show through the transparent tint and double up with the
           // edge layer below.
-          !disabled && 'drop-shadow-tile group-active/press:drop-shadow-none',
+          !disabled && ['drop-shadow-tile group-active/press:drop-shadow-none', pressFadeFilter],
         )}
       >
         {tint && <span className="absolute inset-0 bg-(--tint) mix-blend-overlay" />}
-        {!disabled && <span className="absolute inset-0 bg-overlay-pressed opacity-0 group-active/press:opacity-100" />}
+        {!disabled && (
+          <span
+            className={cn('absolute inset-0 bg-overlay-pressed opacity-0 group-active/press:opacity-100', pressFadeOpacity)}
+          />
+        )}
         {strip && <span className={cn('absolute inset-y-0 left-0 w-[7px] bg-(--mark)', disabled && 'opacity-40')} />}
         {!disabled && (
-          <span className="absolute inset-0 rounded-[inherit] shadow-tile group-active/press:shadow-pressed" />
+          <>
+            {/* Default and pressed edges cross-fade: box-shadow lists of different
+                shapes can't interpolate, opacity can. */}
+            <span
+              className={cn(
+                'absolute inset-0 rounded-[inherit] shadow-tile group-active/press:opacity-0',
+                pressFadeOpacity,
+              )}
+            />
+            <span
+              className={cn(
+                'absolute inset-0 rounded-[inherit] opacity-0 shadow-pressed group-active/press:opacity-100',
+                pressFadeOpacity,
+              )}
+            />
+          </>
         )}
       </span>
       <span className="relative flex size-full flex-col items-center justify-center">{children}</span>

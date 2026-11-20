@@ -1,3 +1,5 @@
+import { AnimatePresence } from 'motion/react'
+import { useEffect, useRef } from 'react'
 import { menu } from '../../../data/menu'
 import { lineViews, totalsFor } from '../../../data/selectors'
 import { usePosState } from '../../../store/context'
@@ -18,6 +20,15 @@ export function OrderPanel() {
   const lines = lineViews(menu, order.lines)
   const { subtotalCents, totalCents } = totalsFor(menu, order.lines)
 
+  // When a new line is appended and the list overflows, bring it into view.
+  const listRef = useRef<HTMLUListElement>(null)
+  const lineCount = lines.length
+  const prevCount = useRef(lineCount)
+  useEffect(() => {
+    if (lineCount > prevCount.current && listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight
+    prevCount.current = lineCount
+  }, [lineCount])
+
   return (
     <aside
       aria-label="Current order"
@@ -25,10 +36,12 @@ export function OrderPanel() {
       className="flex w-[344px] shrink-0 flex-col gap-4 bg-app p-4 @min-[1366px]/app:w-[400px]"
     >
       <OrderHeader orderId={order.id} table={order.table} />
-      <ul data-order-lines className="min-h-0 flex-1 overflow-y-auto">
-        {lines.map((l) => (
-          <OrderLine key={l.item.id} qty={l.qty} name={l.item.name} totalCents={l.totalCents} />
-        ))}
+      <ul ref={listRef} data-order-lines className="min-h-0 flex-1 overflow-y-auto">
+        <AnimatePresence initial={false}>
+          {lines.map((l) => (
+            <OrderLine key={l.item.id} qty={l.qty} name={l.item.name} totalCents={l.totalCents} />
+          ))}
+        </AnimatePresence>
       </ul>
       <Totals subtotalCents={subtotalCents} totalCents={totalCents} />
       <OrderActions totalCents={totalCents} empty={lines.length === 0} />

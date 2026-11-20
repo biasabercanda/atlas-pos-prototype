@@ -23,6 +23,7 @@ export const motionTokens = {
   pressIn: duration[100],
   pressOut: duration[150],
   select: duration[300],
+  feedback: duration[150],
   frame: duration[250],
   ease: easeOutQuint,
 } as const
@@ -31,6 +32,9 @@ const ms = (value: number) => value / 1000
 
 /** Selection indicators that move between options: active tab, toggle and switcher thumbs. */
 export const selectionSlide: Transition = { duration: ms(motionTokens.select), ease: [...motionTokens.ease] }
+
+/** Confirmation of a tap: count badge pop, ★ making room, new order line, new crumb. */
+export const tapFeedback: Transition = { duration: ms(motionTokens.feedback), ease: [...motionTokens.ease] }
 
 /** The presentation shell's device frame changing size (BRIEF §3, ~250ms). */
 export const frameResize: Transition = { duration: ms(motionTokens.frame), ease: [...motionTokens.ease] }
